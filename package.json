@@ -1,0 +1,26 @@
+{
+  "name": "social-media-api",
+  "version": "1.0.0",
+  "description": "A RESTful API for social media apps.",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/guru-bandike/Social-Media-API.git"
+  },
+  "author": "Guru Bandike",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/guru-bandike/Social-Media-API/issues"
+  },
+  "homepage": "https://github.com/guru-bandike/Social-Media-API#readme",
+  "dependencies": {
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}
