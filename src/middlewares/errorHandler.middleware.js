@@ -1,14 +1,18 @@
 import CustomError from '../errors/CustomError.js';
 
 const handleErrors = (err, req, res, next) => {
-  // If the error is a CustomError
-  // then its a known error, so send a response with error specific status code, message and input data if any
+  // If the error is a CustomError, it indicates a known error.
+  // Send a response with the specific status code, message, and additional data if available.
   if (err instanceof CustomError) {
-    return res
-      .status(err.statusCode)
-      .json({ status: false, message: err.message, inputData: err.inputData });
-  }
+    // Construct the response object
+    const response = { success: false, message: err.message };
 
+    // Append any additional error-specific data to the response
+    Object.assign(response, err.dataObj);
+
+    return res.status(err.statusCode).json(response);
+  }
+  console.log(err);
   // Otherwise, it's an unknown error, so send a response with a generic error message
   res
     .status(500)
