@@ -6,9 +6,6 @@ export default class PostModel {
   // Initialize id counter to keep track of post ids
   static idCounter = 0;
 
-  // Initialize posts array to store all posts
-  static posts = [];
-
   // Constructor to create posts
   constructor(userId, caption, mediaUrl) {
     this.id = ++PostModel.idCounter;
@@ -98,6 +95,11 @@ export default class PostModel {
     const deletedPost = posts.splice(userPostIndex, 1);
 
     return deletedPost; // Return deleted post
+  }
+
+  // Method to check a specific post existence
+  static isExists(postId) {
+    return posts.some((p) => p.id == postId);
   }
 }
 
