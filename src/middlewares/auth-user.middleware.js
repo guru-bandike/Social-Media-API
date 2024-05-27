@@ -12,7 +12,7 @@ const authUser = (req, res, next) => {
   }
 
   try {
-    const secretKey = '2EA9EFB2A59DA773AEB58A8CA52A7';
+    const secretKey = 'CF742367BEDA4F17CBA4995B999CF';
     // Verify token using JWT
     const payload = jwt.verify(token, secretKey);
 
