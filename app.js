@@ -2,9 +2,10 @@
 import express from 'express';
 
 // Import necessary internal modules
+import userRouter from './src/features/user/user.routes.js';
+import postRouter from './src/features/post/post.routes.js';
 import welcomeUser from './src/middlewares/welcomeUser.middleware.js';
 import handleErrors from './src/middlewares/errorHandler.middleware.js';
-import userRouter from './src/features/user/user.routes.js';
 import handleInvalidRoute from './src/middlewares/invalidRouteHandler.middleware.js';
 
 // Create server using Express
@@ -17,6 +18,9 @@ app.get('/', welcomeUser);
 
 // Mount the userRouter for handling user related requests
 app.use('/user', userRouter);
+
+// Mount the postRouter for handling post related requests
+app.use('/posts', postRouter);
 
 // Handle invalid routes
 app.use(handleInvalidRoute);
