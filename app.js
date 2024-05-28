@@ -5,6 +5,7 @@ import express from 'express';
 import userRouter from './src/features/user/user.routes.js';
 import postRouter from './src/features/post/post.routes.js';
 import likeRouter from './src/features/like/like.routes.js';
+import commentRouter from './src/features/comment/comment.routes.js';
 import authUser from './src/middlewares/auth-user.middleware.js';
 import welcomeUser from './src/middlewares/welcomeUser.middleware.js';
 import handleErrors from './src/middlewares/errorHandler.middleware.js';
@@ -26,6 +27,9 @@ app.use('/posts', authUser, postRouter);
 
 // Mount the likeRouter for handling likes related requests
 app.use('/likes', authUser, likeRouter);
+
+// Mount the commentRouter for handling comments related requests
+app.use('/comments', authUser, commentRouter);
 
 // Handle invalid routes
 app.use(handleInvalidRoute);

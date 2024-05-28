@@ -69,7 +69,7 @@ export default class PostController {
       // Update new post using product model
       const updatedPost = await PostModel.update(userId, postId, caption, mediaUrl);
       res
-        .status(201)
+        .status(200)
         .json({ success: true, message: 'Post has been successfully updated!', updatedPost });
     } catch (error) {
       return next(error);
@@ -87,7 +87,7 @@ export default class PostController {
 
     // Send success response with deleted post
     res
-      .status(201)
+      .status(200)
       .json({ success: true, message: 'Post has been successfully deleted!', deletedPost });
   }
 }
