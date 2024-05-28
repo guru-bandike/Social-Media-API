@@ -1,4 +1,3 @@
-
 export default class LikeModel {
   // Initialize id counter to keep track of like ids
   static idCounter = 0;
@@ -8,6 +7,11 @@ export default class LikeModel {
     this.id = ++LikeModel.idCounter;
     this.userId = userId;
     this.postId = postId;
+  }
+
+  // Method get all existing Likes
+  static getAll() {
+    return likes;
   }
 
   // Method to toggle like
@@ -29,6 +33,25 @@ export default class LikeModel {
   static getByPostId(postId) {
     const postLikes = likes.filter((l) => l.postId == postId);
     return postLikes;
+  }
+
+  // Method to delete all likes of a specific post
+  // Using the In-place removal technique
+  static deleteByPostId(postId) {
+    // Initialize writeIndex to keep track of where to put non-target likes
+    let writeIndex = 0;
+
+    // Iterate through each like in the 'likes' array
+    for (let readIndex in likes) {
+      // If the current like is not for the target post, copy it to the writeIndex position
+      if (likes[readIndex].postId != postId) {
+        likes[writeIndex] = likes[readIndex]; // Copy the like
+        writeIndex++; // Move the writeIndex to the next position
+      }
+    }
+
+    // Truncate the 'likes' array to remove extra elements beyond writeIndex
+    likes.length = writeIndex;
   }
 }
 

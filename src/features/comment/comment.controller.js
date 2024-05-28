@@ -2,11 +2,22 @@ import CommentModel from './comment.model.js';
 import CustomError from '../../errors/CustomError.js';
 
 export default class CommentController {
+  // Method to get all existing comments
+  getAll(req, res) {
+    // Get all comment using comment model
+    const allComments = CommentModel.getAll();
+
+    // Send success response with all comments
+    res
+      .status(200)
+      .json({ success: true, message: 'All comments has been successfully retieved', allComments });
+  }
+
   // Method to get all existing comments of a specific post
   getPostComments(req, res) {
     const postId = req.params.postId;
 
-    // Get all comment using comment model
+    // Get all post comment using comment model
     const comments = CommentModel.getPostComments(postId);
 
     // Send success response with all found comments

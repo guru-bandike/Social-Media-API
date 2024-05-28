@@ -14,13 +14,12 @@ export default class PostController {
     });
   }
 
-  // Method to get a specific post of an user
+  // Method to get a specific post
   get(req, res) {
-    const userId = req.userId;
     const postId = req.params.id;
 
     // Find requested post using post model
-    const foundPost = PostModel.get(userId, postId);
+    const foundPost = PostModel.get(postId);
 
     // Send success response with requested post
     res
@@ -78,7 +77,7 @@ export default class PostController {
   }
 
   // Method to delete a specific post of user
-  delete(req, res) {
+  delete(req, res, next) {
     const userId = req.userId;
     const postId = req.params.id;
 
@@ -89,5 +88,8 @@ export default class PostController {
     res
       .status(200)
       .json({ success: true, message: 'Post has been successfully deleted!', deletedPost });
+
+    // Call next middleware to delete like and comments of deleted post
+    next();
   }
 }

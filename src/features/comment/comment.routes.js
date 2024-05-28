@@ -7,6 +7,7 @@ const commentRouter = express.Router();
 // Create comment controller for handling comments related operations
 const commentController = new CommentController();
 
+commentRouter.get('/all', commentController.getAll);
 commentRouter.get('/:postId', ensurePostExists, commentController.getPostComments); // Route to get all comments of a specific post
 commentRouter.post('/:postId', ensurePostExists, commentController.add); // Route to add a comment on a specific post
 commentRouter.put('/:commentId', commentController.update); // Route to update a specific comment of user

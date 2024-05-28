@@ -26,11 +26,11 @@ export default class PostModel {
   }
 
   // Method to get a specific post by post id
-  static get(userId, postId) {
-    const targetPost = posts.find((p) => p.userId == userId && p.id == postId);
+  static get(postId) {
+    const targetPost = posts.find((p) => p.id == postId);
 
     if (!targetPost) {
-      throw new CustomError("The requested post was not found among the user's posts!", 404, {
+      throw new CustomError('The requested post was not found!', 404, {
         requestedPostId: postId,
       });
     }

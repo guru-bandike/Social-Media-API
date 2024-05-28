@@ -53,13 +53,53 @@ export default class UserModel {
 }
 
 // Registering users
-UserModel.signup('alpha', 'alpha@gmail.com', 'alpha@A1');
-UserModel.signup('beta', 'beta@gmail.com', 'beta@A1');
-UserModel.signup('gamma', 'gamma@gmail.com', 'gamma@A1');
-UserModel.signup('delta', 'delta@gmail.com', 'delta@A1');
-UserModel.signup('epsilon', 'epsilon@gmail.com', 'epsilon@A1');
-UserModel.signup('zeta', 'zeta@gmail.com', 'zeta@A1');
-UserModel.signup('eta', 'eta@gmail.com', 'eta@A1');
-UserModel.signup('theta', 'theta@gmail.com', 'theta@A1');
-UserModel.signup('iota', 'iota@gmail.com', 'iota@A1');
-UserModel.signup('kappa', 'kappa@gmail.com', 'kappa@A1');
+UserModel.signup(
+  'alpha',
+  'alpha@gmail.com',
+  '$2b$10$jjyKgVdwR6axFH6cVA/4yeH90UwBZLyzqiKEvieFw.UCPor9UPipC'
+);
+UserModel.signup(
+  'beta',
+  'beta@gmail.com',
+  '$2b$10$jjyKgVdwR6axFH6cVA/4yeH90UwBZLyzqiKEvieFw.UCPor9UPipC'
+);
+UserModel.signup(
+  'gamma',
+  'gamma@gmail.com',
+  '$2b$10$jjyKgVdwR6axFH6cVA/4yeH90UwBZLyzqiKEvieFw.UCPor9UPipC'
+);
+UserModel.signup(
+  'delta',
+  'delta@gmail.com',
+  '$2b$10$jjyKgVdwR6axFH6cVA/4yeH90UwBZLyzqiKEvieFw.UCPor9UPipC'
+);
+UserModel.signup(
+  'epsilon',
+  'epsilon@gmail.com',
+  '$2b$10$jjyKgVdwR6axFH6cVA/4yeH90UwBZLyzqiKEvieFw.UCPor9UPipC'
+);
+UserModel.signup(
+  'zeta',
+  'zeta@gmail.com',
+  '$2b$10$jjyKgVdwR6axFH6cVA/4yeH90UwBZLyzqiKEvieFw.UCPor9UPipC'
+);
+UserModel.signup(
+  'eta',
+  'eta@gmail.com',
+  '$2b$10$jjyKgVdwR6axFH6cVA/4yeH90UwBZLyzqiKEvieFw.UCPor9UPipC'
+);
+UserModel.signup(
+  'theta',
+  'theta@gmail.com',
+  '$2b$10$jjyKgVdwR6axFH6cVA/4yeH90UwBZLyzqiKEvieFw.UCPor9UPipC'
+);
+UserModel.signup(
+  'iota',
+  'iota@gmail.com',
+  '$2b$10$jjyKgVdwR6axFH6cVA/4yeH90UwBZLyzqiKEvieFw.UCPor9UPipC'
+);
+UserModel.signup(
+  'kappa',
+  'kappa@gmail.com',
+  '$2b$10$jjyKgVdwR6axFH6cVA/4yeH90UwBZLyzqiKEvieFw.UCPor9UPipC'
+);

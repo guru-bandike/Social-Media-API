@@ -1,6 +1,17 @@
 import LikeModel from './like.model.js';
 
 export default class LikeController {
+  // Method to get all existing Likes
+  getAll(req, res) {
+    // Get all comment using comment model
+    const allLikes = LikeModel.getAll();
+
+    // Send success response with all Likes
+    res
+      .status(200)
+      .json({ success: true, message: 'All Likes has been successfully retieved', allLikes });
+  }
+
   // Method to toggle like
   toggle(req, res) {
     const userId = req.userId;

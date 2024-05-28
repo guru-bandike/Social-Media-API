@@ -12,6 +12,11 @@ export default class CommentModel {
     this.comment = comment;
   }
 
+  // Method get all existing comments
+  static getAll() {
+    return comments;
+  }
+
   // Method to get all existing comments of a specific post
   static getPostComments(postId) {
     const AllExistingcomments = comments.filter((c) => c.postId == postId);
@@ -40,6 +45,8 @@ export default class CommentModel {
     const updatedComment = (comments[targetIndex].comment = comment);
     return updatedComment;
   }
+
+  // Method to delete a specific existing comment of user
   static delete(userId, commentId) {
     // Find existig comment index of user
     const targetIndex = comments.findIndex((c) => c.userId == userId && c.id == commentId);
@@ -54,6 +61,25 @@ export default class CommentModel {
     const deletedComment = comments.splice(targetIndex, 1);
 
     return deletedComment;
+  }
+
+  // Method to delete all comments of a specific post
+  // Using the In-place removal technique
+  static deleteByPostId(postId) {
+    // Initialize writeIndex to keep track of where to put non-target comments
+    let writeIndex = 0;
+
+    // Iterate through each comment in the 'comments' array
+    for (let readIndex in comments) {
+      // If the current comment is not for the target post, copy it to the writeIndex position
+      if (comments[readIndex].postId != postId) {
+        comments[writeIndex] = comments[readIndex]; // Copy the comment
+        writeIndex++; // Move the writeIndex to the next position
+      }
+    }
+
+    // Truncate the 'comments' array to remove extra elements beyond writeIndex
+    comments.length = writeIndex;
   }
 }
 
