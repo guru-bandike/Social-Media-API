@@ -29,5 +29,18 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
-// Create Multer instance with storage cofiguration and Export
-export const uploadPostMedia = multer({ fileFilter, storage: storageConfig });
+const uploadPostMedia = (req, res, next) => {
+  // Create Multer instance with storage configuration and file filter
+  const multerInstance = multer({ fileFilter, storage: storageConfig });
+
+  // Handle multipart/form-data upload
+  multerInstance.single('media')(req, res, (err) => {
+    // If an error occurs, pass it to the next middleware (e.g., Express custom error handler)
+    if (err) return next(err);
+    // If the form data is successfully uploaded, set isParsingDone to true for further usage
+    req.isParsingDone = true;
+    next(); // Proceed to the next middleware
+  });
+};
+
+export default uploadPostMedia;
