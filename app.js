@@ -8,13 +8,15 @@ import likeRouter from './src/features/like/like.routes.js';
 import commentRouter from './src/features/comment/comment.routes.js';
 import authUser from './src/middlewares/auth-user.middleware.js';
 import welcomeUser from './src/middlewares/welcomeUser.middleware.js';
+import logRequest from './src/middlewares/logRequest.middleware.js';
 import handleErrors from './src/middlewares/errorHandler.middleware.js';
 import handleInvalidRoute from './src/middlewares/invalidRouteHandler.middleware.js';
 
 // Create server using Express
 const app = express();
 
-app.use(express.json());
+app.use(express.json()); // Parse incoming JSON bodies
+app.use(logRequest); // Log every request exept user routes
 
 // Welcome user on home route
 app.get('/', welcomeUser);
