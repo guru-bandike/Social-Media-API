@@ -1,2 +1,5 @@
 2024-05-29 09:15:37 info : Method: POST, URL: /posts, Body: {"caption":"good post"}
 2024-05-29 09:16:38 info : Method: POST, URL: /posts, Body: {"caption":"good post"}
+2024-05-29 09:17:06 info : Method: POST, URL: /posts, Body: {"caption":"good post"}
+2024-05-29 13:18:34 info : Method: GET, URL: /posts/filter?caption=nice, Body: {}
+2024-05-29 13:19:03 info : Method: GET, URL: /posts/filter?caption=nice, Body: {}
