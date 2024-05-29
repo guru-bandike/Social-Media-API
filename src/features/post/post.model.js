@@ -97,6 +97,12 @@ export default class PostModel {
     return deletedPost; // Return deleted post
   }
 
+  // Method to filter post using captions
+  static filter(caption) {
+    const filteredPosts = posts.filter((p) => p.caption.includes(caption));
+    return filteredPosts;
+  }
+
   // Method to check a specific post existence
   static isExists(postId) {
     return posts.some((p) => p.id == postId);
@@ -105,14 +111,14 @@ export default class PostModel {
 
 // Existing posts
 let posts = [
-  new PostModel(1, '1st post caption', 'test-image.png'),
-  new PostModel(2, '2nd post caption', 'test-image.png'),
-  new PostModel(3, '3rd post caption', 'test-image.png'),
-  new PostModel(4, '4th post caption', 'test-image.png'),
-  new PostModel(5, '5th post caption', 'test-image.png'),
-  new PostModel(6, '6th post caption', 'test-image.png'),
-  new PostModel(7, '7th post caption', 'test-image.png'),
-  new PostModel(8, '8th post caption', 'test-image.png'),
-  new PostModel(9, '9th post caption', 'test-image.png'),
-  new PostModel(10, '10th post caption', 'test-image.png'),
+  new PostModel(1, 'Living my life in my style 🌟✨', 'test-image.png'),
+  new PostModel(2, 'Just another Magic Monday 🎩✨', 'test-image.png'),
+  new PostModel(3, 'Sassy, classy, and a bit smart-assy 💁♀️', 'test-image.png'),
+  new PostModel(4, 'Keep your heels, head, and standards high 👠👑', 'test-image.png'),
+  new PostModel(5, 'Wanderlust and city dust 🏙️✈️', 'test-image.png'),
+  new PostModel(6, 'Seas the day, ocean waves at play 🌊⛵', 'test-image.png'),
+  new PostModel(7, 'Coffee in one hand, confidence in the other ☕💪', 'test-image.png'),
+  new PostModel(8, 'A little bit of sunshine mixed with a hurricane 🌤️💨', 'test-image.png'),
+  new PostModel(9, 'Reality called, so I hung up 📵🚫', 'test-image.png'),
+  new PostModel(10, 'Serving looks, not tea 🍽️🚫', 'test-image.png'),
 ];

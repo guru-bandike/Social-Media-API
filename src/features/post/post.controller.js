@@ -92,4 +92,22 @@ export default class PostController {
     // Call next middleware to delete like and comments of deleted post
     next();
   }
+
+  // Method to filter post using captions
+  filter(req, res) {
+    const caption = req.query.caption;
+
+    // Filter and get posts using product model
+    const filteredPosts = PostModel.filter(caption);
+
+    // Send success response with filtered posts
+    res
+      .status(200)
+      .json({
+        success: true,
+        message: 'Post has been successfully filtered',
+        query: caption,
+        filteredPosts,
+      });
+  }
 }
