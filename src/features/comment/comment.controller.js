@@ -4,26 +4,47 @@ import CustomError from '../../errors/CustomError.js';
 export default class CommentController {
   // Method to get all existing comments
   getAll(req, res) {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+
+    // If page or limit is less than 1, throw Custom error to sent failure message
+    if (page < 1 || limit < 1)
+      throw new CustomError('page and limit must be positive numbers!', 400, {
+        requestData: { page: req.query.page, limit: req.query.limit },
+      });
+
     // Get all comment using comment model
-    const allComments = CommentModel.getAll();
+    const paginatedComments = CommentModel.getAll(page, limit);
 
     // Send success response with all comments
-    res
-      .status(200)
-      .json({ success: true, message: 'All comments has been successfully retieved', allComments });
+    res.status(200).json({
+      success: true,
+      message: 'Comments has been successfully found',
+      paginatedComments,
+    });
   }
 
   // Method to get all existing comments of a specific post
   getPostComments(req, res) {
     const postId = req.params.postId;
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+
+    // If page or limit is less than 1, throw Custom error to sent failure message
+    if (page < 1 || limit < 1)
+      throw new CustomError('page and limit must be positive numbers!', 400, {
+        requestData: { page: req.query.page, limit: req.query.limit },
+      });
 
     // Get all post comment using comment model
-    const comments = CommentModel.getPostComments(postId);
+    const paginatedComments = CommentModel.getPostComments(postId, page, limit);
 
     // Send success response with all found comments
-    res
-      .status(200)
-      .json({ success: true, message: 'Post comments has been successfully retieved', comments });
+    res.status(200).json({
+      success: true,
+      message: 'Post comments has been successfully found',
+      paginatedComments,
+    });
   }
 
   // Method to add new comment on specific post
