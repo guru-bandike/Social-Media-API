@@ -13,14 +13,30 @@ export default class CommentModel {
   }
 
   // Method get all existing comments
-  static getAll() {
-    return comments;
+  static getAll(page, limit) {
+    // Paginate comments
+    const paginatedComments = paginate(comments, page, limit);
+
+    // If there are no post, throw an custom error to send failure response
+    if (paginatedComments.comments.length == 0) {
+      throw new CustomError('There are no comments of the user!', 404);
+    }
+
+    return paginatedComments;
   }
 
   // Method to get all existing comments of a specific post
-  static getPostComments(postId) {
-    const AllExistingcomments = comments.filter((c) => c.postId == postId);
-    return AllExistingcomments;
+  static getPostComments(postId, page, limit) {
+    const postComments = comments.filter((c) => c.postId == postId);
+
+    // Paginate comments
+    const paginatedComments = paginate(postComments, page, limit);
+
+    // If there are no post, throw an custom error to send failure response
+    if (paginatedComments.comments.length == 0) {
+      throw new CustomError('There are no comments of the user!', 404);
+    }
+    return paginatedComments;
   }
 
   // Method to add new comment on a specific post
@@ -83,36 +99,51 @@ export default class CommentModel {
   }
 }
 
+// Private helper method to paginate comments
+function paginate(comments, page, limit) {
+  const startIndex = (page - 1) * limit;
+  const endIndex = page * limit;
+
+  const paginatedComments = comments.slice(startIndex, endIndex);
+
+  return {
+    currentPage: page,
+    totalcomments: comments.length,
+    totalPages: Math.ceil(comments.length / limit),
+    comments: paginatedComments,
+  };
+}
+
 // Existing comments
 let comments = [
-  new CommentModel(1, 6, 'user 1 comment on post 6'),
-  new CommentModel(3, 2, 'user 3 comment on post 2'),
-  new CommentModel(2, 1, 'user 2 comment on post 1'),
-  new CommentModel(4, 3, 'user 4 comment on post 3'),
-  new CommentModel(5, 4, 'user 5 comment on post 4'),
-  new CommentModel(6, 5, 'user 6 comment on post 5'),
-  new CommentModel(7, 7, 'user 7 comment on post 7'),
-  new CommentModel(8, 8, 'user 8 comment on post 8'),
-  new CommentModel(9, 9, 'user 9 comment on post 9'),
-  new CommentModel(1, 2, 'user 1 comment on post 2'),
-  new CommentModel(2, 3, 'user 2 comment on post 3'),
-  new CommentModel(3, 4, 'user 3 comment on post 4'),
-  new CommentModel(4, 5, 'user 4 comment on post 5'),
-  new CommentModel(5, 6, 'user 5 comment on post 6'),
-  new CommentModel(6, 7, 'user 6 comment on post 7'),
-  new CommentModel(7, 8, 'user 7 comment on post 8'),
-  new CommentModel(8, 9, 'user 8 comment on post 9'),
-  new CommentModel(1, 3, 'user 1 comment on post 3'),
-  new CommentModel(2, 4, 'user 2 comment on post 4'),
-  new CommentModel(3, 5, 'user 3 comment on post 5'),
-  new CommentModel(4, 6, 'user 4 comment on post 6'),
-  new CommentModel(5, 7, 'user 5 comment on post 7'),
-  new CommentModel(6, 8, 'user 6 comment on post 8'),
-  new CommentModel(7, 9, 'user 7 comment on post 9'),
-  new CommentModel(9, 1, 'user 9 comment on post 1'),
-  new CommentModel(10, 1, 'user 10 comment on post 1'),
-  new CommentModel(10, 2, 'user 10 comment on post 2'),
-  new CommentModel(9, 10, 'user 9 comment on post 10'),
-  new CommentModel(8, 10, 'user 8 comment on post 10'),
-  new CommentModel(10, 10, 'user 10 comment on post 10'),
+  new CommentModel(1, 6, 'Love the ocean waves!'),
+  new CommentModel(3, 2, 'Magic Monday indeed!'),
+  new CommentModel(2, 1, 'Living the best life!'),
+  new CommentModel(4, 3, 'Sassy and classy!'),
+  new CommentModel(5, 4, 'High standards, I love it!'),
+  new CommentModel(6, 5, 'Wanderlust vibes!'),
+  new CommentModel(7, 7, 'Coffee and confidence!'),
+  new CommentModel(8, 8, 'Sunshine and hurricane mix!'),
+  new CommentModel(9, 9, 'Hanging up on reality!'),
+  new CommentModel(1, 2, 'Magic Mondays are the best!'),
+  new CommentModel(2, 3, 'Sassy and smart-assy!'),
+  new CommentModel(3, 4, 'High heels and high standards!'),
+  new CommentModel(4, 5, 'City dust and wanderlust!'),
+  new CommentModel(5, 6, 'Seas the day!'),
+  new CommentModel(6, 7, 'Confidence is key!'),
+  new CommentModel(7, 8, 'A mix of sunshine and hurricane!'),
+  new CommentModel(8, 9, 'Hanging up on reality!'),
+  new CommentModel(1, 3, 'Smart-assy indeed!'),
+  new CommentModel(2, 4, 'High standards all the way!'),
+  new CommentModel(3, 5, 'Love the wanderlust!'),
+  new CommentModel(4, 6, 'Seas the day!'),
+  new CommentModel(5, 7, 'Coffee and confidence for the win!'),
+  new CommentModel(6, 8, 'Sunshine and hurricane, what a mix!'),
+  new CommentModel(7, 9, 'Reality can wait!'),
+  new CommentModel(9, 1, 'Living life in style!'),
+  new CommentModel(10, 1, 'Absolutely living your best life!'),
+  new CommentModel(10, 2, 'Mondays made magical!'),
+  new CommentModel(9, 10, 'Serving looks indeed!'),
+  new CommentModel(8, 10, 'Not serving tea, just looks!'),
+  new CommentModel(10, 10, 'Keep serving those looks!'),
 ];

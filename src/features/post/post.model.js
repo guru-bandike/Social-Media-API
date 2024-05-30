@@ -15,14 +15,16 @@ export default class PostModel {
   }
 
   // Method to get all posts
-  static getAll() {
+  static getAll(page, limit) {
+    // Paginate posts
+    const paginatedPosts = paginate(posts, page, limit);
+
     // If there are no post, throw an custom error to send failure response
-    if (posts.length == 0) {
+    if (paginatedPosts.posts.length == 0) {
       throw new CustomError('There are no posts to get!', 404);
     }
 
-    // Otherwise, return all posts
-    return posts;
+    return paginatedPosts;
   }
 
   // Method to get a specific post by post id
@@ -38,17 +40,19 @@ export default class PostModel {
     return targetPost;
   }
 
-  static getByUserId(userId) {
-    // Method to get all user posts
+  // Method to get all user posts
+  static getByUserId(userId, page, limit) {
     const userPosts = posts.filter((p) => p.userId == userId);
 
+    // Paginate user posts
+    const paginatedPosts = paginate(userPosts, page, limit);
+
     // If there are no post, throw an custom error to send failure response
-    if (userPosts.length == 0) {
+    if (paginatedPosts.posts.length == 0) {
       throw new CustomError('There are no posts of the user!', 404);
     }
 
-    // Otherwise, return all user posts
-    return userPosts;
+    return paginatedPosts;
   }
 
   // Method to Add new post
@@ -98,8 +102,17 @@ export default class PostModel {
   }
 
   // Method to filter post using captions
-  static filter(caption) {
+  static filter(caption, page, limit) {
     const filteredPosts = posts.filter((p) => p.caption.includes(caption));
+
+    // Paginate user posts
+    const paginatedPosts = paginate(filteredPosts, page, limit);
+
+    // If there are no post, throw an custom error to send failure response
+    if (paginatedPosts.posts.length == 0) {
+      throw new CustomError('There are no posts with the query!', 404);
+    }
+
     return filteredPosts;
   }
 
@@ -107,6 +120,21 @@ export default class PostModel {
   static isExists(postId) {
     return posts.some((p) => p.id == postId);
   }
+}
+
+// Private helper method to paginate posts
+function paginate(posts, page, limit) {
+  const startIndex = (page - 1) * limit;
+  const endIndex = page * limit;
+
+  const paginatedPosts = posts.slice(startIndex, endIndex);
+
+  return {
+    currentPage: page,
+    totalPosts: posts.length,
+    totalPages: Math.ceil(posts.length / limit),
+    posts: paginatedPosts,
+  };
 }
 
 // Existing posts
@@ -121,4 +149,24 @@ let posts = [
   new PostModel(8, 'A little bit of sunshine mixed with a hurricane 🌤️💨', 'test-image.png'),
   new PostModel(9, 'Reality called, so I hung up 📵🚫', 'test-image.png'),
   new PostModel(10, 'Serving looks, not tea 🍽️🚫', 'test-image.png'),
+  new PostModel(1, 'Dressed to impress 👗💄', 'test-image.png'),
+  new PostModel(2, 'Life is short, make it sweet 🍭❤️', 'test-image.png'),
+  new PostModel(3, 'Adventure awaits 🌍🚀', 'test-image.png'),
+  new PostModel(4, 'Chasing dreams, not people 🌈🏃', 'test-image.png'),
+  new PostModel(5, 'Stay wild, stay free 🦋✨', 'test-image.png'),
+  new PostModel(6, 'Make every day count ⏳✔️', 'test-image.png'),
+  new PostModel(7, 'Good vibes only 🌞💛', 'test-image.png'),
+  new PostModel(8, 'Find the beauty in everything 🌸🌺', 'test-image.png'),
+  new PostModel(9, 'Create your own sunshine 🌞✨', 'test-image.png'),
+  new PostModel(10, 'Believe in yourself 🌟💪', 'test-image.png'),
+  new PostModel(1, 'Live more, worry less 🌈😊', 'test-image.png'),
+  new PostModel(2, 'Dream big, work hard 💭💪', 'test-image.png'),
+  new PostModel(3, 'Be your own kind of beautiful 🌹💫', 'test-image.png'),
+  new PostModel(4, 'Find joy in the journey 🛤️🌻', 'test-image.png'),
+  new PostModel(5, 'Embrace the glorious mess that you are 🌪️💫', 'test-image.png'),
+  new PostModel(6, 'You are enough, just as you are 🌟❤️', 'test-image.png'),
+  new PostModel(7, 'Risking is better than regretting 🎲❎', 'test-image.png'),
+  new PostModel(8, 'Focus on the good 🌟🌈', 'test-image.png'),
+  new PostModel(9, 'Choose happiness 🌟✨', 'test-image.png'),
+  new PostModel(10, 'Stay positive, work hard, make it happen 💪✨', 'test-image.png'),
 ];

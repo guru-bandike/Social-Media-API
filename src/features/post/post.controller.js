@@ -1,16 +1,26 @@
+import CustomError from '../../errors/CustomError.js';
 import PostModel from './post.model.js';
 
 export default class PostController {
   // Method to get all existing posts
   getAll(req, res) {
-    // Find all existing post
-    const allExistingPosts = PostModel.getAll();
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
 
-    // Send success response with all existing post
+    // If page or limit is less than 1, throw Custom error to sent failure message
+    if (page < 1 || limit < 1)
+      throw new CustomError('page and limit must be positive numbers!', 400, {
+        requestData: { page: req.query.page, limit: req.query.limit },
+      });
+
+    // Find existing post and paginate
+    const paginatedPosts = PostModel.getAll(page, limit);
+
+    // Send success response with paginated posts
     res.status(200).json({
       success: true,
-      message: 'All existing posts has been successfully found!',
-      allExistingPosts,
+      message: 'Posts has been successfully found!',
+      paginatedPosts,
     });
   }
 
@@ -30,15 +40,23 @@ export default class PostController {
   // Method to get all of user posts
   getByUserId(req, res) {
     const userId = req.userId;
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+
+    // If page or limit is less than 1, throw Custom error to sent failure message
+    if (page < 1 || limit < 1)
+      throw new CustomError('page and limit must be positive numbers!', 400, {
+        requestData: { page: req.query.page, limit: req.query.limit },
+      });
 
     // Find all of user posts using post model
-    const userPosts = PostModel.getByUserId(userId);
+    const paginatedPosts = PostModel.getByUserId(userId, page, limit);
 
     // Send success response with all user posts
     res.status(200).json({
       success: true,
-      message: 'All of user posts has been successfully found!',
-      userPosts,
+      message: 'User posts has been successfully found!',
+      paginatedPosts,
     });
   }
 
@@ -96,18 +114,24 @@ export default class PostController {
   // Method to filter post using captions
   filter(req, res) {
     const caption = req.query.caption;
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+
+    // If page or limit is less than 1, throw Custom error to sent failure message
+    if (page < 1 || limit < 1)
+      throw new CustomError('page and limit must be positive numbers!', 400, {
+        requestData: { page: req.query.page, limit: req.query.limit },
+      });
 
     // Filter and get posts using product model
-    const filteredPosts = PostModel.filter(caption);
+    const paginatedPosts = PostModel.filter(caption, page, limit);
 
     // Send success response with filtered posts
-    res
-      .status(200)
-      .json({
-        success: true,
-        message: 'Post has been successfully filtered',
-        query: caption,
-        filteredPosts,
-      });
+    res.status(200).json({
+      success: true,
+      message: 'Post has been successfully filtered',
+      query: caption,
+      paginatedPosts,
+    });
   }
 }
