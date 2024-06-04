@@ -6,3 +6,6 @@ node_modules/
 
 # logs
 requests.log
+
+# Environment variables file
+.env
