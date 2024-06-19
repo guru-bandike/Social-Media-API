@@ -1,5 +1,5 @@
 import UserModel from './user.model.js';
-import generateJwtToken from '../../helpers/generateTwtToken.helper.js';
+import generateJwtToken from '../../utils/generateJwtToken.helper.js';
 import CustomError from '../../errors/CustomError.js';
 
 export default class UserController {
