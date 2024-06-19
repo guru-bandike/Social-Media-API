@@ -1,6 +1,7 @@
 import CustomError from '../errors/CustomError.js';
+import logError from '../utils/errorLogger.js';
 
-const handleErrors = (err, req, res, next) => {
+const handleApplicationLevelErrors = (err, req, res, next) => {
   // If the error is a CustomError, it indicates a known error.
   // Send a response with the specific status code, message, and additional data if available.
   if (err instanceof CustomError) {
@@ -12,11 +13,11 @@ const handleErrors = (err, req, res, next) => {
 
     return res.status(err.statusCode).json(response);
   }
-  console.log(err);
+  logError(err)
   // Otherwise, it's an unknown error, so send a response with a generic error message
   res
     .status(500)
     .json({ status: false, message: 'Oops! Something went wrong, Please try again later!' });
 };
 
-export default handleErrors;
+export default handleApplicationLevelErrors;
