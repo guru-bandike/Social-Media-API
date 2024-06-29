@@ -8,7 +8,7 @@ const validateAddPostReq = (req, res, next) => {
 
   // If the post media is not provided, throw custom error to send failure response
   if (!req.file) {
-    throw new CustomError('Post media must be provided!', 400);
+    next(new CustomError('Post media must be provided!', 400));
   }
 
   next();
