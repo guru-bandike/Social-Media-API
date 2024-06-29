@@ -5,9 +5,8 @@ const validateUpdatePostReq = (req, res, next) => {
   const postCaption = req.body.caption;
 
   if (!postMedia && !postCaption)
-    throw new CustomError(
-      'Either post media or post caption must be provided to update the post!',
-      400
+    next(
+      new CustomError('Either post media or post caption must be provided to update the post!', 400)
     );
 
   next();

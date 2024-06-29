@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import logError from './errorLogger';
+import logError from './errorLogger.js';
 
 const addData = async () => {};
 

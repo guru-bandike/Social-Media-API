@@ -1,5 +1,6 @@
 // Import necessary External modules
 import express from 'express';
+import userAgent from 'express-useragent';
 
 // Import necessary internal modules
 import userRouter from './src/features/user/user.routes.js';
@@ -16,22 +17,23 @@ import handleInvalidRoute from './src/middlewares/invalidRouteHandler.middleware
 const app = express();
 
 app.use(express.json()); // Parse incoming JSON bodies
+app.use(userAgent.express()); // Parse user-agent information
 app.use(logRequest); // Log every request exept user routes
 
 // Welcome user on home route
-app.get('/', welcomeUser);
+app.get('/api', welcomeUser);
 
 // Mount the userRouter for handling user related requests
-app.use('/user', userRouter);
+app.use('/api/users', userRouter);
 
 // Mount the postRouter for handling post related requests
-app.use('/posts', authUser, postRouter);
+app.use('/api/posts', authUser, postRouter);
 
 // Mount the likeRouter for handling likes related requests
-app.use('/likes', authUser, likeRouter);
+app.use('/api/likes', authUser, likeRouter);
 
 // Mount the commentRouter for handling comments related requests
-app.use('/comments', authUser, commentRouter);
+app.use('/api/comments', authUser, commentRouter);
 
 // Handle invalid routes
 app.use(handleInvalidRoute);
