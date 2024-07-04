@@ -1,31 +1,50 @@
-import LikeModel from './like.model.js';
+import LikeRepository from './like.repository.js';
 
 export default class LikeController {
-  // Method to get all existing Likes
-  getAll(req, res) {
-    // Get all comment using comment model
-    const allLikes = LikeModel.getAll();
-
-    // Send success response with all Likes
-    res
-      .status(200)
-      .json({ success: true, message: 'All Likes has been successfully retieved', allLikes });
+  constructor() {
+    this.likeRepo = new LikeRepository();
   }
 
   // Method to toggle like
-  toggle(req, res) {
+  async toggle(req, res, next) {
     const userId = req.userId;
-    const postId = parseInt(req.params.postId);
+    const targetId = req.params.id;
+    const targetType = req.body.targetType;
 
-    LikeModel.toggle(userId, postId);
-    res.status(200).json({ success: true, message: 'Post has been successfully toggled' });
+    try {
+      // Tolggle like
+      const result = await this.likeRepo.toggle(userId, targetId, targetType);
+
+      // If like has been added, send creation response
+      if (result.performedOperatoin === 'Creation')
+        return res.status(201).json({
+          success: true,
+          message: `Like has been successfully added to ${targetType}`,
+          performedOperatoin: result.performedOperatoin,
+          like: result.newLike,
+        });
+
+      // If like has been removed, send deletion response
+      res.status(200).json({
+        success: true,
+        message: `Like has been successfully removed from ${targetType}`,
+        performedOperatoin: result.performedOperatoin,
+        like: result.deletedLike,
+      });
+    } catch (err) {
+      next(err);
+    }
   }
-  // Method to get all likes of a particular post
-  getByPostId(req, res) {
-    const postId = req.params.postId;
-    const postLikes = LikeModel.getByPostId(postId);
-    res
-      .status(200)
-      .json({ success: true, message: 'Post likes has been successfully retrieved', postLikes });
+  // Method to get all likes of a particular post or comment
+  async getlikes(req, res, next) {
+    const targetId = req.params.id;
+    try {
+      const likes = await this.likeRepo.getLikes(targetId);
+      res
+        .status(200)
+        .json({ success: true, message: 'Likes has been successfully retrieved', likes });
+    } catch (err) {
+      next(err);
+    }
   }
 }
