@@ -8,7 +8,7 @@ const verifyPostOwnership = async (req, res, next) => {
 
   try {
     // Validate post id
-    await validateMongodbObjectId(postId, 'Post');
+    await validateMongodbObjectId(postId, 'post');
 
     // Find target post
     const post = await PostModel.findById(postId);

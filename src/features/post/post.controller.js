@@ -42,7 +42,7 @@ export default class PostController {
 
     try {
       // validate post id
-      await validateMongodbObjectId(postId, 'Post');
+      await validateMongodbObjectId(postId, 'post');
 
       // Find requested post
       const foundPost = await this.PostRepo.getById(postId);
@@ -144,7 +144,7 @@ export default class PostController {
 
     try {
       // Validate post id
-      await validateMongodbObjectId(postId, 'Post');
+      await validateMongodbObjectId(postId, 'post');
 
       // Delete specified post using product model
       const deletedPost = await this.PostRepo.delete(userId, postId);

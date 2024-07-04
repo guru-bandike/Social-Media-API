@@ -14,12 +14,9 @@ const likeSchema = new mongoose.Schema({
   },
   targetType: {
     type: String,
-    enum: ['Post', 'Comment'],
+    enum: ['post', 'comment'],
     required: [true, 'Target type is required!'],
-    set: (v) => {
-      v = String(v);
-      return v[0].toUpperCase() + v.slice(1).toLowerCase();
-    },
+    set: (v) => v.toString().toLowerCase(),
   },
 });
 
@@ -60,6 +57,6 @@ likeSchema.post(['findOneAndDelete', 'findByIdAndDelete'], async function (doc, 
   }
 });
 
-const LikeModel = mongoose.model('Like', likeSchema);
+const LikeModel = mongoose.model('like', likeSchema);
 
 export default LikeModel;
