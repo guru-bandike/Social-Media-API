@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import CustomError from '../errors/CustomError.js';
 import logError from '../utils/errorLogger.js';
+import multer from 'multer';
 
 const handleApplicationLevelErrors = (err, req, res, next) => {
   // If the error is a CustomError, it indicates a known error.
@@ -36,6 +37,17 @@ const handleApplicationLevelErrors = (err, req, res, next) => {
       validationErrors: [`${field} must be unique!`],
       requestData: req.body,
     });
+  }
+
+  // Handile Multer errors
+  if (err instanceof multer.MulterError) {
+    if (err.code == 'LIMIT_UNEXPECTED_FILE')
+      return res.status(400).json({
+        status: false,
+        message: 'Incorrect file field name!',
+        receivedField: err.field,
+        expectedField: 'media',
+      });
   }
 
   // Log the error for debugging purposes

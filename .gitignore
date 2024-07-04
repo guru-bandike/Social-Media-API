@@ -10,3 +10,6 @@ error.log
 
 # Environment variables file
 .env
+
+# uploads
+uploads/

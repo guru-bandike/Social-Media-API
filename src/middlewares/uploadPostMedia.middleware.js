@@ -1,15 +1,22 @@
 import multer from 'multer';
+import fs from 'fs';
 
 // Define accepted file types list
 const acceptedFileTypes = ['image/', 'audio/', 'video/', 'application/pdf'];
 
+// Define storage directory
+const storageDir = './uploads';
+
+// Ensure the storage directory exists
+if (!fs.existsSync(storageDir)) fs.mkdirSync(storageDir, { recursive: true });
+
 // Define storage cofiguration
 const storageConfig = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'uploads');
+    cb(null, './uploads');
   },
   filename: (req, file, cb) => {
-    cb(null, new Date().toISOString().replace(/:/g, '_') + file.originalname);
+    cb(null, (new Date().toISOString() + '-' + file.originalname).replace(/[: ]/g, '_'));
   },
 });
 

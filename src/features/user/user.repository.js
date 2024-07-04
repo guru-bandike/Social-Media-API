@@ -33,6 +33,15 @@ export default class UserRepository {
     }
   }
 
+  // Method to get user document
+  async getById(userId) {
+    try {
+      return await UserModel.findById(userId);
+    } catch (err) {
+      throw err;
+    }
+  }
+
   // Method to add token to the user's tokens array
   async addToken(userDoc, token, deviceInfo) {
     try {
@@ -136,6 +145,32 @@ export default class UserRepository {
       // Filter active sessions
       const activeSessions = user.tokens.filter((t) => !t.isExpired);
       return activeSessions;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  // Method to add post to user
+  async addPostToUser(userId, postId) {
+    try {
+      await UserModel.findByIdAndUpdate(
+        userId,
+        { $push: { posts: postId } },
+        { runValidators: true }
+      );
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  // Method to delete post from user
+  async deletePostFromUser(userId, postId) {
+    try {
+      await UserModel.findByIdAndUpdate(
+        userId,
+        { $pull: { posts: postId } },
+        { runValidators: true }
+      );
     } catch (err) {
       throw err;
     }

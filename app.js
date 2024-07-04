@@ -12,6 +12,7 @@ import welcomeUser from './src/middlewares/welcomeUser.middleware.js';
 import logRequest from './src/middlewares/logRequest.middleware.js';
 import handleApplicationLevelErrors from './src/middlewares/applicationLevelErrorHandler.middleware.js';
 import handleInvalidRoute from './src/middlewares/invalidRouteHandler.middleware.js';
+import path from 'path';
 
 // Create server using Express
 const app = express();
@@ -22,6 +23,9 @@ app.use(logRequest); // Log every request exept user routes
 
 // Welcome user on home route
 app.get('/api', welcomeUser);
+
+// Serve post media
+app.use('/uploads', express.static(path.join(path.resolve(), 'uploads')));
 
 // Mount the userRouter for handling user related requests
 app.use('/api/users', userRouter);
