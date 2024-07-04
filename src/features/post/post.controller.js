@@ -1,5 +1,6 @@
 import CustomError from '../../errors/CustomError.js';
 import deleteUploadedFile from '../../utils/deleteUploadFile.js';
+import validateMongodbObjectId from '../../utils/validateMongodbObjectId.js';
 import UserRepository from '../user/user.repository.js';
 import PostRepository from './post.repository.js';
 
@@ -40,6 +41,9 @@ export default class PostController {
     const postId = req.params.id;
 
     try {
+      // validate post id
+      await validateMongodbObjectId(postId, 'Post');
+
       // Find requested post
       const foundPost = await this.PostRepo.getById(postId);
 
@@ -139,6 +143,9 @@ export default class PostController {
     const postId = req.params.id;
 
     try {
+      // Validate post id
+      await validateMongodbObjectId(postId, 'Post');
+
       // Delete specified post using product model
       const deletedPost = await this.PostRepo.delete(userId, postId);
 

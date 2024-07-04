@@ -1,4 +1,5 @@
 import LikeRepository from './like.repository.js';
+import validateMongodbObjectId from '../../utils/validateMongodbObjectId.js';
 
 export default class LikeController {
   constructor() {
@@ -39,6 +40,9 @@ export default class LikeController {
   async getlikes(req, res, next) {
     const targetId = req.params.id;
     try {
+      // Validate target id
+      await validateMongodbObjectId(targetId, 'post or comment');
+
       const likes = await this.likeRepo.getLikes(targetId);
       res
         .status(200)

@@ -49,9 +49,6 @@ export default class PostRepository {
   // Method to get specific post
   async getById(postId) {
     try {
-      if (!mongoose.Types.ObjectId.isValid(postId))
-        throw new CustomError('Invalid Post Id!', 400, { postId });
-
       return await PostModel.findById(postId);
     } catch (err) {
       throw err;
@@ -62,8 +59,16 @@ export default class PostRepository {
   async getByUserId(userId, page, limit) {
     try {
       const userDoc = await this.UserRepo.getById(userId);
-      const totalPosts = userDoc.posts.length;
+      const totalPosts = userDoc?.posts?.length || 0;
       const totalPages = Math.ceil(totalPosts / limit);
+
+      // If user don't have any post, return empty posts array
+      if (totalPosts == 0)
+        return {
+          totalPosts,
+          totalPages,
+          paginatedPosts: [],
+        };
 
       // If the requested page is greater than total pages, throw custom error to send failure response
       if (page > totalPages)
@@ -80,6 +85,7 @@ export default class PostRepository {
         })
       ).posts;
 
+      // Return paginated posts
       return {
         totalPosts,
         totalPages,
