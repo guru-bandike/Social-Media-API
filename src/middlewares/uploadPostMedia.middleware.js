@@ -6,10 +6,10 @@ const acceptedFileTypes = ['image/', 'audio/', 'video/', 'application/pdf'];
 // Define storage cofiguration
 const storageConfig = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'uploads');
+    cb(null, './uploads');
   },
   filename: (req, file, cb) => {
-    cb(null, new Date().toISOString().replace(/:/g, '_') + file.originalname);
+    cb(null, (new Date().toISOString() + '-' + file.originalname).replace(/[: ]/g, '_'));
   },
 });
 

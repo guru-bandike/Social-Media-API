@@ -3,8 +3,8 @@ import bcryptHasher from 'bcrypt';
 import CustomError from '../../errors/CustomError.js';
 
 const tokenSchema = new mongoose.Schema({
-  token: { type: String, required: true },
-  createdAt: { type: Date, required: true },
+  token: { type: String, required: [true, 'Token is required!'] },
+  createdAt: { type: Date, required: [true, 'Token creation date is required!'] },
   expiresAt: Date,
   browser: String,
   os: String,
@@ -36,6 +36,7 @@ const userSchema = new mongoose.Schema(
       enum: { values: ['male', 'female', 'others'], message: 'Invalid Gender!' },
       set: (v) => v.toString().toLowerCase(), // Normalize to lowercase before checking
     },
+    posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }],
     tokens: [tokenSchema],
   },
   { timestamps: true }

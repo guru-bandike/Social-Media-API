@@ -3,7 +3,6 @@ import UserRepository from './user.repository.js';
 import jwt from 'jsonwebtoken';
 
 export default class UserController {
-  // Method to register new user
   constructor() {
     this.userRepo = new UserRepository();
   }
