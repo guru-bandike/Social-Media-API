@@ -1,23 +1,29 @@
-import PostRepository from '../features/post/post.repository.js';
 import CustomError from '../errors/CustomError.js';
-
-const postRepo = new PostRepository();
+import { PostModel } from '../features/post/post.model.js';
+import validateMongodbObjectId from '../utils/validateMongodbObjectId.js';
 
 const verifyPostOwnership = async (req, res, next) => {
   const postId = req.params.id;
   const userId = req.userId;
 
-  // Find target post
-  const post = await postRepo.getById(postId);
+  try {
+    // Validate post id
+    await validateMongodbObjectId(postId, 'Post');
 
-  // If post does not exist, send failure response
-  if (!post) return next(new CustomError('Post not found!', 404, { postId }));
+    // Find target post
+    const post = await PostModel.findById(postId);
 
-  // If the user is not the Owner of the post, send failure response
-  if (!post.userId == userId)
-    return next(new CustomError('User is not the Owner/Author of the post!', 401));
+    // If post does not exist, send failure response
+    if (!post) return next(new CustomError('Post not found!', 404, { postId }));
 
-  next();
+    // If the user is not the Owner of the post, send failure response
+    if (!post.userId == userId)
+      return next(new CustomError('User is not the Owner/Author of the post!', 401));
+
+    next();
+  } catch (err) {
+    next(err);
+  }
 };
 
 export default verifyPostOwnership;

@@ -12,7 +12,7 @@ likeRouter.get('/toggle/:id', validateToggleLikeReq, (req, res, next) => {
 }); // Route to toggle a specific post like status
 
 likeRouter.get('/:id', (req, res, next) => {
-  likeController.get.likes(req, res, next);
+  likeController.getlikes(req, res, next);
 }); // Route to get a specific post likes
 
 export default likeRouter;
