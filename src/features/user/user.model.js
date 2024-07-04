@@ -37,6 +37,7 @@ const userSchema = new mongoose.Schema(
       set: (v) => v.toString().toLowerCase(), // Normalize to lowercase before checking
     },
     posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }],
+    likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Like' }],
     tokens: [tokenSchema],
   },
   { timestamps: true }
