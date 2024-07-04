@@ -36,8 +36,8 @@ const userSchema = new mongoose.Schema(
       enum: { values: ['male', 'female', 'others'], message: 'Invalid Gender!' },
       set: (v) => v.toString().toLowerCase(), // Normalize to lowercase before checking
     },
-    posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }],
-    likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Like' }],
+    posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'post' }],
+    likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'like' }],
     tokens: [tokenSchema],
   },
   { timestamps: true }
@@ -102,4 +102,4 @@ userSchema.statics.isEmailInUse = async function (email) {
   return !!user;
 };
 
-export const UserModel = mongoose.model('User', userSchema);
+export const UserModel = mongoose.model('user', userSchema);
