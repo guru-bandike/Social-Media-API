@@ -1,5 +1,4 @@
 import CustomError from '../../errors/CustomError.js';
-import deleteUploadedFile from '../../utils/deleteUploadFile.js';
 import validateMongodbObjectId from '../../utils/validateMongodbObjectId.js';
 import UserRepository from '../user/user.repository.js';
 import PostRepository from './post.repository.js';
@@ -118,19 +117,13 @@ export default class PostController {
 
     try {
       // Update new post using product model
-      const response = await this.PostRepo.update(postId, caption, mediaUrl);
-
-      // If Media is updated, delete old media
-      if (response.oldMediaUrl) {
-        const oldMediaName = response.oldMediaUrl.split('/').pop();
-        await deleteUploadedFile(oldMediaName);
-      }
+      const updatedPost = await this.PostRepo.update(postId, caption, mediaUrl);
 
       // Send success response with updated post
       res.status(200).json({
         success: true,
         message: 'Post has been successfully updated!',
-        updatedPost: response.post,
+        updatedPost,
       });
     } catch (error) {
       return next(error);

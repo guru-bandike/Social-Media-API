@@ -110,15 +110,14 @@ export default class PostRepository {
   // Method to update specific post
   async update(postId, caption, mediaUrl) {
     try {
-      const post = await PostModel.findById(postId);
-
-      const oldMediaUrl = mediaUrl ? post.mediaUrl : undefined;
-
-      if (caption) post.caption = caption;
-      if (mediaUrl) post.mediaUrl = mediaUrl;
-      await post.save();
-
-      return { post, oldMediaUrl };
+      const updatedPost = await PostModel.findByIdAndUpdate(
+        postId,
+        {
+          $set: { caption, mediaUrl },
+        },
+        { new: true }
+      );
+      return updatedPost;
     } catch (err) {
       throw err;
     }

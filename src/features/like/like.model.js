@@ -20,7 +20,9 @@ const likeSchema = new mongoose.Schema({
   },
 });
 
-// Update user's likes array when saving a new like document
+// -------------------------------- Middleware section: Start -------------------------------- //
+
+// Middleware Update user's likes array when saving a new like document
 likeSchema.post('save', async function (doc, next) {
   try {
     // Find and update the user document to push the new like _id
@@ -37,8 +39,8 @@ likeSchema.post('save', async function (doc, next) {
   }
 });
 
-// Remove deleted like _id from user's likes array when a like document is deleted
-likeSchema.post(['findOneAndDelete', 'findByIdAndDelete'], async function (doc, next) {
+// Middleware Remove deleted like _id from user's likes array when a like document is deleted
+likeSchema.post('findOneAndDelete', async function (doc, next) {
   try {
     // Check if the document exists before attempting to update the user document
     if (doc) {
@@ -56,6 +58,8 @@ likeSchema.post(['findOneAndDelete', 'findByIdAndDelete'], async function (doc, 
     next(err);
   }
 });
+
+// -------------------------------- Middleware section: End -------------------------------- //
 
 const LikeModel = mongoose.model('like', likeSchema);
 
