@@ -22,36 +22,37 @@ const likeSchema = new mongoose.Schema({
 
 // -------------------------------- Middleware section: Start -------------------------------- //
 
-// Middleware Update user's likes array when saving a new like document
-likeSchema.post('save', async function (doc, next) {
+// Middleware to Update user's likes array when saving a new like document
+likeSchema.post('save', async function (savedLike, next) {
   try {
     // Find and update the user document to push the new like _id
-    const updatedUser = await UserModel.findByIdAndUpdate(doc.userId, {
-      $push: { likes: doc._id },
+    const updatedUser = await UserModel.findByIdAndUpdate(savedLike.userId, {
+      $push: { likes: savedLike._id },
     });
 
     // Check if user document was successfully updated
     if (!updatedUser) {
-      throw new Error('Failed to update user document with new like.');
+      throw new Error('Failed to update user document with new like!');
     }
   } catch (err) {
     next(err);
   }
 });
 
-// Middleware Remove deleted like _id from user's likes array when a like document is deleted
-likeSchema.post('findOneAndDelete', async function (doc, next) {
+// Middleware to Remove deleted like _id from user's likes array when a like document is deleted
+likeSchema.post('findOneAndDelete', async function (deletedLike, next) {
   try {
-    // Check if the document exists before attempting to update the user document
-    if (doc) {
+    // If the deleted document is found then it mean deletion of like was successful
+    // Then only update the user document
+    if (deletedLike) {
       // Find and update the user document to pull the deleted like _id
-      const updatedUser = await UserModel.findByIdAndUpdate(doc.userId, {
-        $pull: { likes: doc._id },
+      const updatedUser = await UserModel.findByIdAndUpdate(deletedLike.userId, {
+        $pull: { likes: deletedLike._id },
       });
 
       // Check if user document was successfully updated
       if (!updatedUser) {
-        throw new Error('Failed to remove deleted like from user document.');
+        throw new Error('Failed to remove deleted like from user document!');
       }
     }
   } catch (err) {
