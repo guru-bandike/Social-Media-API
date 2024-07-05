@@ -43,7 +43,9 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Pre-save hook to hash the password before saving the user document
+// -------------------------------- Middleware Section: Start -------------------------------- //
+
+// Middleware to hash the password before saving the user document
 userSchema.pre('save', async function (next) {
   const userDoc = this;
 
@@ -72,6 +74,10 @@ userSchema.pre('save', async function (next) {
   }
 });
 
+// -------------------------------- Middleware Section: End -------------------------------- //
+
+// -------------------------------- User Document Methods section: Start -------------------------------- //
+
 // Define an instance method to compare passwords in the User schema
 userSchema.methods.comparePassword = async function (requestPassword) {
   // 'this' refers to the user document on which the method is called
@@ -85,6 +91,10 @@ userSchema.methods.comparePassword = async function (requestPassword) {
   // Return the comparision result of request password and hashed password
   return await bcryptHasher.compare(requestPassword, hashedPassword);
 };
+
+// -------------------------------- User Document Methods section: End -------------------------------- //
+
+// -------------------------------- User Model Methods section: Start -------------------------------- //
 
 // Define a static method in the User schema to check if an email is already in use
 userSchema.statics.isEmailInUse = async function (email) {
@@ -101,5 +111,7 @@ userSchema.statics.isEmailInUse = async function (email) {
   // If a user is found with the email, return true (email is in use), otherwise return false
   return !!user;
 };
+
+// -------------------------------- User Model Methods section: End -------------------------------- //
 
 export const UserModel = mongoose.model('user', userSchema);
