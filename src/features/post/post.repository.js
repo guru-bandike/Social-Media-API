@@ -1,4 +1,3 @@
-import mongoose from 'mongoose';
 import UserRepository from '../user/user.repository.js';
 import { PostModel } from './post.model.js';
 import CustomError from '../../errors/CustomError.js';
@@ -133,12 +132,47 @@ export default class PostRepository {
   }
 
   // Method to filter using captions
-  async filter(caption, page, limit) {
+  async filter(searchQuery, page, limit) {
     try {
-      const searchQuery = new RegExp(caption, 'i'); // 'i' makes regex case-insensitive
-      const filteredPosts = await PostModel.find({ caption: searchQuery });
-      const paginatedFilteredPosts = this.paginate(filteredPosts, page, limit);
-      return paginatedFilteredPosts;
+      const regexSearchQuery = new RegExp(searchQuery, 'i'); // 'i' makes regex case-insensitive
+      const filteredPosts = (
+        await PostModel.aggregate([
+          {
+            $match: { caption: regexSearchQuery },
+          },
+          {
+            $facet: {
+              posts: [{ $skip: (page - 1) * limit }, { $limit: limit }],
+              totalCount: [{ $count: 'count' }],
+            },
+          },
+        ])
+      )[0];
+
+      if (filteredPosts.totalCount.length === 0)
+        return {
+          totalPosts: 0,
+          totalPages: 0,
+          currentPage: page,
+          paginatedPosts: [],
+        };
+
+      const totalPosts = filteredPosts.totalCount[0].count;
+      const totalPages = Math.ceil(totalPosts / limit);
+
+      // If the requested page is greater than total pages, throw custom error to send failure response
+      if (page > totalPages)
+        throw new CustomError('Invalid page number!', 400, {
+          requestedPage: page,
+          totalPages,
+        });
+
+      return {
+        totalPosts,
+        totalPages: Math.ceil(totalPosts / limit),
+        currentPage: page,
+        paginatedPosts: filteredPosts.posts,
+      };
     } catch (err) {
       throw err;
     }
@@ -152,19 +186,5 @@ export default class PostRepository {
     } catch (err) {
       throw err;
     }
-  }
-
-  // Method to paginate posts
-  paginate(posts, page, limit) {
-    const startIndex = (page - 1) * limit;
-    const endIndex = startIndex + limit;
-    const paginatedPosts = posts.slice(startIndex, endIndex);
-
-    return {
-      totalPosts: posts.length,
-      totalPages: Math.ceil(posts.length / limit),
-      currentPage: page,
-      paginatedPosts,
-    };
   }
 }
