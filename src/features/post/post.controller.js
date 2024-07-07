@@ -161,16 +161,16 @@ export default class PostController {
     }
   }
 
-  // Method to filter posts using captions
+  // Method to filter posts
   async filter(req, res, next) {
-    const caption = req.query.caption;
+    const searchQuery = req.query.searchQuery;
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
 
     try {
-      // If the caption is not provided, throw Custom error to sent failure message
-      if (!caption || caption.trim().length === 0)
-        throw new CustomError('Caption is required!', 400, { caption });
+      // If the searchQuery is not provided, throw Custom error to sent failure message
+      if (!searchQuery || searchQuery.trim().length === 0)
+        throw new CustomError('Search Query is required!', 400, { searchQuery });
 
       // If page or limit is less than 1, throw Custom error to sent failure message
       if (page < 1 || limit < 1)
@@ -179,13 +179,13 @@ export default class PostController {
         });
 
       // Filter and get posts using product model
-      const filteredPosts = await this.PostRepo.filter(caption, page, limit);
+      const filteredPosts = await this.PostRepo.filter(searchQuery, page, limit);
 
       // Send success response with filtered posts
       res.status(200).json({
         success: true,
         message: 'Post has been successfully filtered!',
-        query: caption,
+        searchQuery,
         filteredPosts,
       });
     } catch (err) {
