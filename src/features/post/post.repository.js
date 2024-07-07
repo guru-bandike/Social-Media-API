@@ -24,6 +24,14 @@ export default class PostRepository {
         ])
       )[0];
 
+      if (posts.totalPosts.length === 0)
+        return {
+          totalPosts: 0,
+          totalPages: 0,
+          currentPage: page,
+          paginatedPosts: [],
+        };
+
       const totalPosts = posts.totalPosts[0].count;
       const totalPages = Math.ceil(totalPosts / limit);
 
