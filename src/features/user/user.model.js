@@ -38,6 +38,7 @@ const userSchema = new mongoose.Schema(
     },
     posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'post' }],
     likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'like' }],
+    comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'comment' }],
     tokens: [tokenSchema],
   },
   { timestamps: true }

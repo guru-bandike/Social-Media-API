@@ -1,149 +1,137 @@
+import mongoose from 'mongoose';
+import { UserModel } from '../user/user.model.js';
+import { PostModel } from '../post/post.model.js';
 import CustomError from '../../errors/CustomError.js';
 
-export default class CommentModel {
-  // Initialize id counter to keep track of comment ids
-  static idCounter = 0;
+const commentSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'user',
+    required: [true, 'User Id is required!'],
+  },
+  postId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'post',
+    required: [true, 'Post Id is required!'],
+  },
+  content: { type: String, required: [true, 'Comment content is required!'] },
+});
 
-  // Constructor to create comments
-  constructor(userId, postId, comment) {
-    this.id = ++CommentModel.idCounter;
-    this.userId = userId;
-    this.postId = postId;
-    this.comment = comment;
+// -------------------------------- Middleware section: Start -------------------------------- //
+
+// Middleware to Update user and post collections when creating a new Comment document
+commentSchema.post('save', async function (savedComment, next) {
+  // Only perform the transaction if the comment is newly created
+  if (!savedComment.$__.inserting) {
+    return next();
   }
 
-  // Method get all existing comments
-  static getAll(page, limit) {
-    // Paginate comments
-    const paginatedComments = paginate(comments, page, limit);
+  // Create session
+  const session = await mongoose.startSession();
+  // Start transaction
+  session.startTransaction();
 
-    // If there are no post, throw an custom error to send failure response
-    if (paginatedComments.comments.length == 0) {
-      throw new CustomError('There are no comments of the user!', 404);
+  try {
+    // Update user document with newly created comment id
+    const updatedUser = await UserModel.findByIdAndUpdate(
+      savedComment.userId,
+      { $push: { comments: savedComment._id } },
+      { session, new: true }
+    );
+
+    // If user updation failed, throw error to send failure response
+    if (!updatedUser) throw new Error('User not found or $Push operation failed!');
+
+    // Update post document with newly created comment id
+    const updatedPost = await PostModel.findByIdAndUpdate(
+      savedComment.postId,
+      { $push: { comments: savedComment._id } },
+      { session, new: true }
+    );
+
+    // If post updation failed, throw error to send failure response
+    if (!updatedPost) throw new Error('Post not found or $Push operation failed!');
+
+    // If all above operations are successful, commit transaction
+    await session.commitTransaction();
+  } catch (err) {
+    // If any error occurs, Abort transaction
+    await session.abortTransaction();
+
+    try {
+      // Try to delete newly created comment, Because transaction has failed
+      const deletedComment = await CommentModel.findByIdAndDelete(savedComment._id);
+      if (!deletedComment) throw new Error('Failed to delete comment!');
+    } catch (deleteErr) {
+      // If comment deletion failed, pass error to the application-level error handler
+      return next(deleteErr);
     }
 
-    return paginatedComments;
+    // Pass the original error to the application-level error handler
+    return next(err);
+  } finally {
+    // Finally end session
+    await session.endSession();
   }
 
-  // Method to get all existing comments of a specific post
-  static getPostComments(postId, page, limit) {
-    const postComments = comments.filter((c) => c.postId == postId);
+  // If the transaction is successful, Proceed to the next middleware
+  next();
+});
 
-    // Paginate comments
-    const paginatedComments = paginate(postComments, page, limit);
+// Middleware to Update user and post collections when deleting a Comment document
+commentSchema.pre('findOneAndDelete', async function (next) {
+  const targetCommentId = this.getQuery()._id;
 
-    // If there are no post, throw an custom error to send failure response
-    if (paginatedComments.comments.length == 0) {
-      throw new CustomError('There are no comments of the user!', 404);
-    }
-    return paginatedComments;
+  // Create session
+  const session = await mongoose.startSession();
+  // Start transaction
+  session.startTransaction();
+
+  try {
+    // Find target comment
+    const targetComment = await CommentModel.findById(targetCommentId);
+
+    // If target comment not found, throw error to send failure response
+    if (!targetComment)
+      throw new CustomError('Comment not found!', 404, { commentId: targetCommentId });
+
+    // Update user document
+    const updatedUser = await UserModel.findByIdAndUpdate(
+      targetComment.userId,
+      { $pull: { comments: targetCommentId } },
+      { session, new: true }
+    );
+
+    // If user updation failed, throw error to send failure response
+    if (!updatedUser) throw new Error('User not found or $Pull operation failed!');
+
+    // Update post document
+    const updatedPost = await PostModel.findByIdAndUpdate(
+      targetComment.postId,
+      { $pull: { comments: targetCommentId } },
+      { session, new: true }
+    );
+
+    // If post updation failed, throw error to send failure response
+    if (!updatedPost) throw new Error('Post not found or $Pull operation failed!');
+
+    // If all above operations are successful, commit transaction
+    await session.commitTransaction();
+  } catch (err) {
+    // If any error occurs, Abort transaction
+    await session.abortTransaction();
+
+    // Pass the error to the application-level error handler
+    return next(err);
+  } finally {
+    // Finally end session
+    await session.endSession();
   }
 
-  // Method to add new comment on a specific post
-  static add(userId, postId, comment) {
-    const addedcomment = new CommentModel(userId, postId, comment);
-    comments.push(addedcomment);
-    return addedcomment;
-  }
+  // If the transaction is successful, Proceed to the next middleware
+  next();
+});
 
-  // Method to update a specific existing comment of user
-  static update(userId, commentId, comment) {
-    // Find existig comment index of user
-    const targetIndex = comments.findIndex((c) => c.userId == userId && c.id == commentId);
+// -------------------------------- Middleware section: End -------------------------------- //
 
-    // If target index not found, throw custom error to send failure response
-    if (targetIndex == -1)
-      throw new CustomError('Comment not found in user comments!', 404, {
-        requestData: { commentId, comment },
-      });
-
-    // Update comment
-    const updatedComment = (comments[targetIndex].comment = comment);
-    return updatedComment;
-  }
-
-  // Method to delete a specific existing comment of user
-  static delete(userId, commentId) {
-    // Find existig comment index of user
-    const targetIndex = comments.findIndex((c) => c.userId == userId && c.id == commentId);
-
-    // If target index not found, throw custom error to send failure response
-    if (targetIndex == -1)
-      throw new CustomError('Comment not found in user comments!', 404, {
-        requestCommentId: commentId,
-      });
-
-    // Delete target comment and get
-    const deletedComment = comments.splice(targetIndex, 1);
-
-    return deletedComment;
-  }
-
-  // Method to delete all comments of a specific post
-  // Using the In-place removal technique
-  static deleteByPostId(postId) {
-    // Initialize writeIndex to keep track of where to put non-target comments
-    let writeIndex = 0;
-
-    // Iterate through each comment in the 'comments' array
-    for (let readIndex in comments) {
-      // If the current comment is not for the target post, copy it to the writeIndex position
-      if (comments[readIndex].postId != postId) {
-        comments[writeIndex] = comments[readIndex]; // Copy the comment
-        writeIndex++; // Move the writeIndex to the next position
-      }
-    }
-
-    // Truncate the 'comments' array to remove extra elements beyond writeIndex
-    comments.length = writeIndex;
-  }
-}
-
-// Private helper method to paginate comments
-function paginate(comments, page, limit) {
-  const startIndex = (page - 1) * limit;
-  const endIndex = page * limit;
-
-  const paginatedComments = comments.slice(startIndex, endIndex);
-
-  return {
-    currentPage: page,
-    totalcomments: comments.length,
-    totalPages: Math.ceil(comments.length / limit),
-    comments: paginatedComments,
-  };
-}
-
-// Existing comments
-let comments = [
-  new CommentModel(1, 6, 'Love the ocean waves!'),
-  new CommentModel(3, 2, 'Magic Monday indeed!'),
-  new CommentModel(2, 1, 'Living the best life!'),
-  new CommentModel(4, 3, 'Sassy and classy!'),
-  new CommentModel(5, 4, 'High standards, I love it!'),
-  new CommentModel(6, 5, 'Wanderlust vibes!'),
-  new CommentModel(7, 7, 'Coffee and confidence!'),
-  new CommentModel(8, 8, 'Sunshine and hurricane mix!'),
-  new CommentModel(9, 9, 'Hanging up on reality!'),
-  new CommentModel(1, 2, 'Magic Mondays are the best!'),
-  new CommentModel(2, 3, 'Sassy and smart-assy!'),
-  new CommentModel(3, 4, 'High heels and high standards!'),
-  new CommentModel(4, 5, 'City dust and wanderlust!'),
-  new CommentModel(5, 6, 'Seas the day!'),
-  new CommentModel(6, 7, 'Confidence is key!'),
-  new CommentModel(7, 8, 'A mix of sunshine and hurricane!'),
-  new CommentModel(8, 9, 'Hanging up on reality!'),
-  new CommentModel(1, 3, 'Smart-assy indeed!'),
-  new CommentModel(2, 4, 'High standards all the way!'),
-  new CommentModel(3, 5, 'Love the wanderlust!'),
-  new CommentModel(4, 6, 'Seas the day!'),
-  new CommentModel(5, 7, 'Coffee and confidence for the win!'),
-  new CommentModel(6, 8, 'Sunshine and hurricane, what a mix!'),
-  new CommentModel(7, 9, 'Reality can wait!'),
-  new CommentModel(9, 1, 'Living life in style!'),
-  new CommentModel(10, 1, 'Absolutely living your best life!'),
-  new CommentModel(10, 2, 'Mondays made magical!'),
-  new CommentModel(9, 10, 'Serving looks indeed!'),
-  new CommentModel(8, 10, 'Not serving tea, just looks!'),
-  new CommentModel(10, 10, 'Keep serving those looks!'),
-];
+export const CommentModel = mongoose.model('comment', commentSchema);

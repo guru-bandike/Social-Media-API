@@ -10,11 +10,17 @@ const postSchema = new mongoose.Schema({
   },
   mediaUrl: { type: String, required: [true, 'Post media is required!'] },
   caption: { type: String },
+  comments: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'comment',
+    },
+  ],
 });
 
 // -------------------------------- Middleware section: Start -------------------------------- //
 
-// Middleware to execute before a document is updated using `findOneAndUpdate`
+// Middleware to execute before a document is updated using `findOneAndUpdate` or `findByIdAndUpdate`
 postSchema.pre('findOneAndUpdate', async function (next) {
   try {
     // Get the update object containing the fields to be updated
@@ -23,8 +29,8 @@ postSchema.pre('findOneAndUpdate', async function (next) {
     // Find the current document that matches the query
     const post = await this.model.findOne(this.getQuery());
 
-    // Check if the mediaUrl is being updated and is different from the current mediaUrl
-    if (post.mediaUrl !== update.$set?.mediaUrl) {
+    // Delete post media only while updating with new one
+    if (update.$set?.mediaUrl) {
       // Extract the file name from the current mediaUrl
       const fileName = post.mediaUrl.split('/').pop();
       // Construct the file path to the media file on the server
@@ -32,7 +38,7 @@ postSchema.pre('findOneAndUpdate', async function (next) {
       // Delete the file from the server
       await fs.unlink(filePath);
     }
-    // Proceed to the next middleware or the update operation
+    // Proceed to the next middleware
     next();
   } catch (err) {
     next(err);
