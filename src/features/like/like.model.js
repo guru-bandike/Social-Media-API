@@ -1,5 +1,8 @@
 import mongoose from 'mongoose';
-import { UserModel } from '../user/user.model.js';
+import { PostModel } from '../post/post.model.js';
+import { CommentModel } from '../comment/comment.model.js';
+
+const validTargetTypes = ['post', 'comment'];
 
 const likeSchema = new mongoose.Schema({
   userId: {
@@ -7,60 +10,37 @@ const likeSchema = new mongoose.Schema({
     ref: 'User',
     required: [true, 'User ID is required!'],
   },
+  targetType: {
+    type: String,
+    required: [true, 'Target type is required!'],
+    set: (v) => v.toString().toLowerCase(), // Ensure targetType is always stored in lowercase
+  },
   targetId: {
     type: mongoose.Schema.Types.ObjectId,
     refPath: 'targetType',
     required: [true, 'Target ID is required!'],
   },
-  targetType: {
-    type: String,
-    enum: ['post', 'comment'],
-    required: [true, 'Target type is required!'],
-    set: (v) => v.toString().toLowerCase(),
-  },
 });
 
-// -------------------------------- Middleware section: Start -------------------------------- //
+// -------------------------------- Validators section: Start -------------------------------- //
 
-// Middleware to Update user's likes array when saving a new like document
-likeSchema.post('save', async function (savedLike, next) {
-  try {
-    // Find and update the user document to push the new like _id
-    const updatedUser = await UserModel.findByIdAndUpdate(savedLike.userId, {
-      $push: { likes: savedLike._id },
-    });
+// Validator to ensure targetType is valid
+likeSchema.path('targetType').validate(function (targetType) {
+  if (validTargetTypes.includes(targetType)) return true; // Return true if targetType is valid
+  else return false; // Return false if targetType is invalid
+}, 'Invalid target Type!');
 
-    // Check if user document was successfully updated
-    if (!updatedUser) {
-      throw new Error('Failed to update user document with new like!');
-    }
-  } catch (err) {
-    next(err);
-  }
-});
+// validator to ensure targetId exists in the appropriate collection
+likeSchema.path('targetId').validate(async function (targetId) {
+  if (!validTargetTypes.includes(this.targetType)) return; // Skip validation if targetType is invalid
 
-// Middleware to Remove deleted like _id from user's likes array when a like document is deleted
-likeSchema.post('findOneAndDelete', async function (deletedLike, next) {
-  try {
-    // If the deleted document is found then it mean deletion of like was successful
-    // Then only update the user document
-    if (deletedLike) {
-      // Find and update the user document to pull the deleted like _id
-      const updatedUser = await UserModel.findByIdAndUpdate(deletedLike.userId, {
-        $pull: { likes: deletedLike._id },
-      });
+  // If like is for 'post', ensure post exists
+  if (this.targetType === 'post') return !!(await PostModel.findById(targetId));
+  //IF like is for 'comment', ensure comment exists
+  if (this.targetType === 'comment') return !!(await CommentModel.findById(targetId));
+}, 'Invalid target ID!');
 
-      // Check if user document was successfully updated
-      if (!updatedUser) {
-        throw new Error('Failed to remove deleted like from user document!');
-      }
-    }
-  } catch (err) {
-    next(err);
-  }
-});
-
-// -------------------------------- Middleware section: End -------------------------------- //
+// -------------------------------- Validators section: End -------------------------------- //
 
 const LikeModel = mongoose.model('like', likeSchema);
 

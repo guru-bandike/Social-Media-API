@@ -15,13 +15,14 @@ const commentSchema = new mongoose.Schema({
     required: [true, 'Post Id is required!'],
   },
   content: { type: String, required: [true, 'Comment content is required!'] },
+  likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'like' }],
 });
 
 // -------------------------------- Middleware section: Start -------------------------------- //
 
 // Middleware to Update user and post collections when creating a new Comment document
 commentSchema.post('save', async function (savedComment, next) {
-  // Only perform the transaction if the comment is newly created
+  // Ensure the transaction is only executed when a new comment is being created
   if (!savedComment.$__.inserting) {
     return next();
   }

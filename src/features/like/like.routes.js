@@ -7,7 +7,7 @@ const likeRouter = express.Router();
 // Create Like controller instance for handling like related operations
 const likeController = new LikeController();
 
-likeRouter.get('/toggle/:id', validateToggleLikeReq, (req, res, next) => {
+likeRouter.get('/toggle/:id', (req, res, next) => {
   likeController.toggle(req, res, next);
 }); // Route to toggle a specific post like status
 
