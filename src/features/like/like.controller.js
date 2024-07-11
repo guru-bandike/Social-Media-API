@@ -13,15 +13,18 @@ export default class LikeController {
     const targetType = req.body.targetType;
 
     try {
+      // Validate target id
+      await validateMongodbObjectId(targetId, targetType);
+
       // Tolggle like
-      const result = await this.likeRepo.toggle(userId, targetId, targetType);
+      const result = await this.likeRepo.toggle(userId, targetType, targetId);
 
       // If like has been added, send creation response
-      if (result.performedOperatoin === 'Creation')
+      if (result.performedOperation === 'Creation')
         return res.status(201).json({
           success: true,
           message: `Like has been successfully added to ${targetType}`,
-          performedOperatoin: result.performedOperatoin,
+          performedOperation: result.performedOperation,
           like: result.newLike,
         });
 
@@ -29,13 +32,14 @@ export default class LikeController {
       res.status(200).json({
         success: true,
         message: `Like has been successfully removed from ${targetType}`,
-        performedOperatoin: result.performedOperatoin,
+        performedOperation: result.performedOperation,
         like: result.deletedLike,
       });
     } catch (err) {
       next(err);
     }
   }
+
   // Method to get all likes of a particular post or comment
   async getlikes(req, res, next) {
     const targetId = req.params.id;

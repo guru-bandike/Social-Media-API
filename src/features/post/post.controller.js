@@ -116,6 +116,9 @@ export default class PostController {
     const mediaUrl = req.file ? `http://localhost:${port}/uploads/` + req.file.filename : undefined;
 
     try {
+      // Validate post id
+      await validateMongodbObjectId(postId, 'post');
+
       // Update new post using product model
       const updatedPost = await this.PostRepo.update(postId, caption, mediaUrl);
 
