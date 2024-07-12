@@ -158,21 +158,15 @@ export default class PostRepository {
     session.startTransaction();
 
     try {
-      // Find post
-      const targetPost = await PostModel.findById(postId).session(session);
+      // Delete target post
+      const deletedPost = await PostModel.findByIdAndDelete(postId, { session });
 
-      // If post not found, throw Costome error to send failure response
-      if (!targetPost) throw new CustomError('Post not found!', 404, { postId });
+      // If deleted post not found, throw a custom error to trigger a ROLLBACK and send a failure response
+      if (!deletedPost) throw new CustomError('Post not found!', 404, { postId });
 
-      // If user unauthorized, throw Costome error to send failure response
-      if (targetPost.userId != userId)
+      // If the user is not authorized, throw a custom error to trigger a ROLLBACK and send a failure response
+      if (!deletedPost.userId.equals(userId))
         throw new CustomError('User unauthorized to delete this post!', 401, { postId });
-
-      // If user authorized, delete target post
-      const deletedPost = await PostModel.findByIdAndDelete(targetPost._id, { session });
-
-      // If unable to delete, throw error to send failure response
-      if (!deletedPost) throw new Error('Post deletion failed!');
 
       // Update user
       await updateDocument('user', userId, 'posts', 'pull', deletedPost._id, session);

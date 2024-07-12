@@ -120,10 +120,10 @@ export default class CommentRepository {
       // Delete target comment
       const deletedComment = await CommentModel.findByIdAndDelete(commentId, { session });
 
-      // If deleted comment is not found, throw custom error to send failure response
+      // If deleted comment is not found, throw a custom error to trigger a ROLLBACK and send a failure response
       if (!deletedComment) throw new CustomError('Comment not found!', 404, { commentId });
 
-      // If user is not Authorized, throw custom error to send failure response
+      // If the user is not authorized, throw a custom error to trigger a ROLLBACK and send a failure response
       if (!deletedComment.userId.equals(userId))
         throw new CustomError('User unauthorized to delete this comment!', 401, { commentId });
 
