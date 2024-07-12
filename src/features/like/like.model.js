@@ -35,9 +35,9 @@ likeSchema.path('targetId').validate(async function (targetId) {
   if (!validTargetTypes.includes(this.targetType)) return; // Skip validation if targetType is invalid
 
   // If like is for 'post', ensure post exists
-  if (this.targetType === 'post') return !!(await PostModel.findById(targetId));
+  if (this.targetType === 'post') return Boolean(await PostModel.findById(targetId));
   //IF like is for 'comment', ensure comment exists
-  if (this.targetType === 'comment') return !!(await CommentModel.findById(targetId));
+  if (this.targetType === 'comment') return Boolean(await CommentModel.findById(targetId));
 }, 'Invalid target ID!');
 
 // -------------------------------- Validators section: End -------------------------------- //
