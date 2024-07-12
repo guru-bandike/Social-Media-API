@@ -95,8 +95,6 @@ export default class PostController {
     try {
       // Add new post
       const addedPost = await this.PostRepo.add(userId, caption, mediaUrl);
-      // Add new Post ID to the uesr
-      await this.UserRepo.addPostToUser(userId, addedPost._id);
 
       // Send success response with newly added post
       res
@@ -144,16 +142,6 @@ export default class PostController {
 
       // Delete specified post using product model
       const deletedPost = await this.PostRepo.delete(userId, postId);
-
-      // If post not deleted then it mean post not found, send failure response
-      if (!deletedPost)
-        return next(new CustomError('Post not found in user posts!', 404, { postId }));
-
-      // Delete post from user
-      await this.UserRepo.deletePostFromUser(userId, postId);
-
-      // Delete post media
-      await deleteUploadedFile(deletedPost.mediaUrl);
 
       // Send success response with deleted post
       res

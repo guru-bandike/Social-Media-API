@@ -1,7 +1,6 @@
 import mongoose from 'mongoose';
-import fs from 'fs/promises';
-import path from 'path';
 import CustomError from '../../errors/CustomError.js';
+import { deletePostMedia } from '../../utils/fileStorageHelpers.js';
 
 const postSchema = new mongoose.Schema({
   userId: {
@@ -30,7 +29,7 @@ const postSchema = new mongoose.Schema({
 // Middleware to execute before a document is updated using `findOneAndUpdate` or `findByIdAndUpdate`
 postSchema.pre('findOneAndUpdate', async function (next) {
   const targetId = this.getQuery()._id;
-  
+
   try {
     // Find target post
     const targetPost = await PostModel.findById(targetId);
@@ -43,14 +42,7 @@ postSchema.pre('findOneAndUpdate', async function (next) {
 
     // Delete post media only while updating with new one
     if (update.$set?.mediaUrl) {
-      // Extract the file name from the current mediaUrl
-      const fileName = targetPost.mediaUrl.split('/').pop();
-
-      // Construct the file path to the media file on the server
-      const filePath = path.join('uploads', fileName);
-
-      // Delete the file from the server
-      await fs.unlink(filePath);
+      await deletePostMedia(targetPost.mediaUrl);
     }
 
     // Proceed to the next middleware

@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import LikeModel from './like.model.js';
-import { updateCommentDoc, updatePostDoc, updateUserDoc } from '../../utils/dbHelpers.js';
+import { updateDocument } from '../../utils/dbHelpers.js';
 
 export default class LikeRepository {
   // Method to toggle like
@@ -17,14 +17,28 @@ export default class LikeRepository {
       // If like was deleted, update user and (post or comment accordingly)
       if (deletedLike) {
         // Update user
-        await updateUserDoc(userId, 'likes', 'pull', deletedLike._id, session);
+        await updateDocument('user', userId, 'likes', 'pull', deletedLike._id, session);
 
         // If like is for post, update post
         if (targetType === 'post')
-          await updatePostDoc(deletedLike.targetId, 'likes', 'pull', deletedLike._id, session);
-        // Else update comment
-        else
-          await updateCommentDoc(deletedLike.targetId, 'likes', 'pull', deletedLike._id, session);
+          await updateDocument(
+            'post',
+            deletedLike.targetId,
+            'likes',
+            'pull',
+            deletedLike._id,
+            session
+          );
+        // Else If like is for comment, update comment
+        else if (targetType === 'comment')
+          await updateDocument(
+            'comment',
+            deletedLike.targetId,
+            'likes',
+            'pull',
+            deletedLike._id,
+            session
+          );
 
         // If all updates has been successful, commit transaction
         await session.commitTransaction();
@@ -35,13 +49,14 @@ export default class LikeRepository {
         const newLike = await this.#add(userId, targetType, targetId, session);
 
         // Update user
-        await updateUserDoc(userId, 'likes', 'push', newLike._id, session);
+        await updateDocument('user', userId, 'likes', 'push', newLike._id, session);
 
         // If like is for post, update post
         if (targetType === 'post')
-          await updatePostDoc(newLike.targetId, 'likes', 'push', newLike._id, session);
-        // Else update comment
-        else await updateCommentDoc(newLike.targetId, 'likes', 'push', newLike._id, session);
+          await updateDocument('post', newLike.targetId, 'likes', 'push', newLike._id, session);
+        // Else If like is for comment, update comment
+        else if (targetType === 'comment')
+          await updateDocument('comment', newLike.targetId, 'likes', 'push', newLike._id, session);
 
         // If all updates has been successful, commit transaction
         await session.commitTransaction();
