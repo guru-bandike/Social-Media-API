@@ -149,30 +149,4 @@ export default class UserRepository {
       throw err;
     }
   }
-
-  // Method to add post to user
-  async addPostToUser(userId, postId) {
-    try {
-      await UserModel.findByIdAndUpdate(
-        userId,
-        { $push: { posts: postId } },
-        { runValidators: true }
-      );
-    } catch (err) {
-      throw err;
-    }
-  }
-
-  // Method to delete post from user
-  async deletePostFromUser(userId, postId) {
-    try {
-      await UserModel.findByIdAndUpdate(
-        userId,
-        { $pull: { posts: postId } },
-        { runValidators: true }
-      );
-    } catch (err) {
-      throw err;
-    }
-  }
 }

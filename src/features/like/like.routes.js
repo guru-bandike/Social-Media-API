@@ -1,6 +1,5 @@
 import express from 'express';
 import LikeController from './like.controller.js';
-import validateToggleLikeReq from '../../middlewares/validateToggleLikeReq.validation.middleware.js';
 
 // Create express router instance for handling like related routes
 const likeRouter = express.Router();

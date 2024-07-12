@@ -5,7 +5,6 @@ import uploadPostMedia from '../../middlewares/uploadPostMedia.middleware.js';
 import verifyPostOwnership from '../../middlewares/verifyPostOwnership.validation.middleware.js';
 import validateAddPostReq from '../../middlewares/validateAddPostReq.validation.middleware.js';
 import validateUpdatePostReq from '../../middlewares/validateUpdatePostReq.validation.middleware.js';
-import deleteLikesAndComments from '../../middlewares/deleteLikesAndComments.middleware.js';
 
 // Create express router instance for handling post related routes
 const postRouter = express.Router();
