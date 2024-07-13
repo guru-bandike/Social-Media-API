@@ -13,3 +13,6 @@ error.log
 
 # uploads
 uploads/
+
+# temp note
+tempNote.txt

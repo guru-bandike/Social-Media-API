@@ -4,6 +4,7 @@ import userAgent from 'express-useragent';
 
 // Import necessary internal modules
 import userRouter from './src/features/user/user.routes.js';
+import otpRouter from './src/features/otp/otp.routes.js';
 import postRouter from './src/features/post/post.routes.js';
 import likeRouter from './src/features/like/like.routes.js';
 import commentRouter from './src/features/comment/comment.routes.js';
@@ -29,6 +30,9 @@ app.use('/uploads', express.static(path.join(path.resolve(), 'uploads')));
 
 // Mount the userRouter for handling user related requests
 app.use('/api/users', userRouter);
+
+// Mount the otpRouter for handling otp related requests
+app.use('/api/otp', otpRouter);
 
 // Mount the postRouter for handling post related requests
 app.use('/api/posts', authUser, postRouter);

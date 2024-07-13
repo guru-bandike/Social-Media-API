@@ -8,6 +8,7 @@ import validateUpdatePostReq from '../../middlewares/validateUpdatePostReq.valid
 
 // Create express router instance for handling post related routes
 const postRouter = express.Router();
+
 // Create Post controller instance for handling post related operations
 const postController = new PostController();
 

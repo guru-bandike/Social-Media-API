@@ -3,6 +3,7 @@ import CommentController from './comment.controller.js';
 
 // Create express router instance for handling comments related routes
 const commentRouter = express.Router();
+
 // Create comment controller for handling comments related operations
 const commentController = new CommentController();
 

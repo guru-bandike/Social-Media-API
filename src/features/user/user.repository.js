@@ -33,10 +33,21 @@ export default class UserRepository {
     }
   }
 
-  // Method to get user document
+  // -------------------------------- Helper Method Section: Start -------------------------------- //
+
+  // Method to get user with ID
   async getById(userId) {
     try {
       return await UserModel.findById(userId);
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  // Method to get user with email
+  async getByEmail(email) {
+    try {
+      return await UserModel.findOne({ email });
     } catch (err) {
       throw err;
     }
@@ -149,4 +160,6 @@ export default class UserRepository {
       throw err;
     }
   }
+
+  // -------------------------------- Helper Method Section: End -------------------------------- //
 }

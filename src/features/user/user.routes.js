@@ -5,6 +5,7 @@ import authUser from '../../middlewares/auth-user.middleware.js';
 
 // Initialize user router to handle user related routes
 const userRouter = express.Router();
+
 // Initialize user controller to user related operations
 const userController = new UserController();
 
