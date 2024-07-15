@@ -2,6 +2,9 @@
 import express from 'express';
 import userAgent from 'express-useragent';
 
+// Import necessary Core modules
+import path from 'path';
+
 // Import necessary internal modules
 import userRouter from './src/features/user/user.routes.js';
 import otpRouter from './src/features/otp/otp.routes.js';
@@ -13,7 +16,7 @@ import welcomeUser from './src/middlewares/welcomeUser.middleware.js';
 import logRequest from './src/middlewares/logRequest.middleware.js';
 import handleApplicationLevelErrors from './src/middlewares/applicationLevelErrorHandler.middleware.js';
 import handleInvalidRoute from './src/middlewares/invalidRouteHandler.middleware.js';
-import path from 'path';
+import friendshipRouter from './src/features/friendship/friendship.routes.js';
 
 // Create server using Express
 const app = express();
@@ -42,6 +45,9 @@ app.use('/api/likes', authUser, likeRouter);
 
 // Mount the commentRouter for handling comments related requests
 app.use('/api/comments', authUser, commentRouter);
+
+// Mount the friendshipRouter for handling friendship related requests
+app.use('/api/friends', authUser, friendshipRouter);
 
 // Handle invalid routes
 app.use(handleInvalidRoute);

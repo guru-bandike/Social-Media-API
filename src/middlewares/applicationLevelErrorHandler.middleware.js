@@ -24,7 +24,6 @@ const handleApplicationLevelErrors = (err, req, res, next) => {
       success: false,
       message: err._message,
       validationErrors,
-      requestData: req.body,
     });
   }
 

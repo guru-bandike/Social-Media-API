@@ -6,7 +6,7 @@ import { CommentModel } from '../features/comment/comment.model.js';
 const validOperations = ['push', 'pull'];
 
 // Valid fields that can be updated in documents
-const validFields = ['posts', 'likes', 'comments'];
+const validFields = ['posts', 'likes', 'comments', 'friendships'];
 
 // Mapping model types to their respective Mongoose models(collections)
 const modelMap = {

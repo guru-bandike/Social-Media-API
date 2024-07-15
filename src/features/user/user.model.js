@@ -39,10 +39,11 @@ const userSchema = new mongoose.Schema(
     posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'post' }],
     likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'like' }],
     comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'comment' }],
+    friendships: [{ type: mongoose.Schema.Types.ObjectId, ref: 'friendship' }],
     tokens: [tokenSchema],
     otp: {
-      code: { type: String, required: [true, 'OTP code is required!'] },
-      expiresAt: { type: Date, required: [true, 'OTP expiration time is required!'] },
+      code: { type: String },
+      expiresAt: { type: Date },
     },
   },
   { timestamps: true }

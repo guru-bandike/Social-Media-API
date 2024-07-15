@@ -45,7 +45,7 @@ export default class CommentController {
 
     try {
       // If the requested comment is empty, throw a custom error to send failure response
-      if (!content || content.trim().length == 0)
+      if (!content || content.toString().trim().length == 0)
         throw new CustomError('Comment content can not be empty!', 400, { content });
 
       // Ensure post id is valid
