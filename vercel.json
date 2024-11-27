@@ -1,0 +1,6 @@
+{
+  "version": 2,
+  "name": "auth-system",
+  "builds": [{ "src": "server.js", "use": "@vercel/node" }],
+  "routes": [{ "src": "/(.*)", "dest": "/server.js" }]
+}
