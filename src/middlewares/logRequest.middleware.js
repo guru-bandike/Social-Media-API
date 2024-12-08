@@ -21,9 +21,9 @@ const logRequest = (req, res, next) => {
   const { method, originalUrl, body } = req;
 
   // If request is a user related, skip logging request
-  if (originalUrl.startsWith('/user')) return next();
+  if (originalUrl.startsWith('/api/users')) return next();
 
-  if (originalUrl.startsWith('/posts') && (method == 'POST' || method == 'PUT')) {
+  if (originalUrl.startsWith('/api/posts') && (method == 'POST' || method == 'PUT')) {
     if (!req.isParsingDone) return next();
   }
 

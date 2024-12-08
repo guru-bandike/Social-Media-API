@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import CustomError from '../../errors/CustomError.js';
-import { deletePostMedia } from '../../utils/fileStorageHelpers.js';
+import { deletePostMedia } from '../../utils/mediaManager.js';
 
 const postSchema = new mongoose.Schema({
   userId: {

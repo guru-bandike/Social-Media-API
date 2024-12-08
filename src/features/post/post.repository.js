@@ -3,7 +3,7 @@ import UserRepository from '../user/user.repository.js';
 import { PostModel } from './post.model.js';
 import CustomError from '../../errors/CustomError.js';
 import { updateDocument } from '../../utils/dbHelpers.js';
-import { deletePostMedia } from '../../utils/fileStorageHelpers.js';
+import { deletePostMedia } from '../../utils/mediaManager.js';
 
 export default class PostRepository {
   constructor() {

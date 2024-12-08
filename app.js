@@ -2,9 +2,6 @@
 import express from 'express';
 import userAgent from 'express-useragent';
 
-// Import necessary Core modules
-import path from 'path';
-
 // Import necessary internal modules
 import userRouter from './src/features/user/user.routes.js';
 import otpRouter from './src/features/otp/otp.routes.js';
@@ -27,9 +24,6 @@ app.use(logRequest); // Log every request exept user routes
 
 // Welcome user on home route
 app.get('/api', welcomeUser);
-
-// Serve post media
-app.use('/uploads', express.static(path.join(path.resolve(), 'uploads')));
 
 // Mount the userRouter for handling user related requests
 app.use('/api/users', userRouter);

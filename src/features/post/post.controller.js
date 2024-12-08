@@ -87,10 +87,8 @@ export default class PostController {
 
   // Method to add new post
   async add(req, res, next) {
-    const userId = req.userId;
+    const { userId, mediaUrl } = req;
     const { caption } = req.body;
-    const port = process.env.PORT || 5000;
-    const mediaUrl = `http://localhost:${port}/uploads/` + req.file.filename;
 
     try {
       // Add new post
@@ -107,11 +105,9 @@ export default class PostController {
 
   // Method to update existing post
   async update(req, res, next) {
-    const userId = req.userId;
     const postId = req.params.id;
     const { caption } = req.body;
-    const port = process.env.PORT || 5000;
-    const mediaUrl = req.file ? `http://localhost:${port}/uploads/` + req.file.filename : undefined;
+    const mediaUrl = req.mediaUrl;
 
     try {
       // Validate post id
