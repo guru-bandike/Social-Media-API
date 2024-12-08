@@ -1,6 +1,7 @@
 // Import necessary External modules
 import express from 'express';
 import userAgent from 'express-useragent';
+import cors from 'cors';
 
 // Import necessary internal modules
 import userRouter from './src/features/user/user.routes.js';
@@ -18,6 +19,7 @@ import friendshipRouter from './src/features/friendship/friendship.routes.js';
 // Create server using Express
 const app = express();
 
+app.use(cors());
 app.use(express.json()); // Parse incoming JSON bodies
 app.use(userAgent.express()); // Parse user-agent information
 app.use(logRequest); // Log every request exept user routes
