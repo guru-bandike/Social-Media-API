@@ -1,7 +1,8 @@
 const handleInvalidRoute = (req, res) => {
   res.status(404).json({
-    status: false,
-    message: 'API not found!, Please check out our documentaion for more information!',
+    success: false,
+    message:
+      'API endpoint not found! Please refer to the README file or check out the Postman collection for detailed documentation and instructions on available API paths!',
   });
 };
 
