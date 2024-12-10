@@ -1,0 +1,150 @@
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
+<h1 align="center" style="font-weight: bolder; color: #059d06">Social Media API</h1>
+
+<div style="display: flex; justify-content: space-around; gap: 20px;">
+  <a href="https://god.gw.postman.com/run-collection/33891228-8c4bf29f-8670-4851-9c05-2356ca075713?action=collection/fork&source=rip_markdown&collection-url=entityId=33891228-8c4bf29f-8670-4851-9c05-2356ca075713&entityType=collection&workspaceId=7a63351a-2e1e-4435-84ba-c7e1ed8def04#?env%5Bsocial-media-api%5D=W3sia2V5IjoiYmFzZVVybCIsInZhbHVlIjoiaHR0cHM6Ly9zb2NpYWwtbWVkaWEtYXBpLXByb2R1Y3Rpb24tOTAzZC51cC5yYWlsd2F5LmFwcCIsImVuYWJsZWQiOnRydWUsInR5cGUiOiJkZWZhdWx0In1d" target="_blank" style="text-decoration: none;">
+    <button style="background-color: rgb(255, 108, 55); color: white; padding: 12px 12px; border: none; border-radius: 5px; font-size: 1rem; cursor: pointer; transition: background-color 0.3s; display: flex; align-items: center;">
+      <i class="fas fa-play" style="margin-right: 8px;"></i> 
+      Test API with Postman
+    </button>
+  </a>
+
+  <a href="" target="_blank" style="text-decoration: none;">
+    <button style="background-color: rgb(255, 108, 55); color: white; padding: 12px 12px; border: none; border-radius: 5px; font-size: 1rem; cursor: pointer; transition: background-color 0.3s; display: flex; align-items: center;"> 
+      <i class="fas fa-play" style="margin-right: 8px;"></i> 
+      How to Test API with Postman
+    </button>
+  </a>
+</div>
+
+## Project Description
+
+**Social Media API** is a backend application designed to support social media platforms. It provides essential functionalities such as user authentication, post management, commenting, liking, friendships, OTP-based password resets and passoword hashing, ensuring a seamless and secure user experience.
+
+## Key Features
+
+- **User Authentication:** Secure signup, login, and logout functionalities, including multi-device logout support.
+- **Post Management:** Full CRUD capabilities for posts with ownership restrictions.
+- **Comment System:** Add, update, and delete comments with ownership and permissions management.
+- **Like Functionality:** Toggle likes on posts and comments with metadata support.
+- **Friendships:** Manage friend requests and friendships with pending request handling.
+- **OTP-Based Password Reset:** Secure OTP generation and verification for password resets.
+
+---
+
+## Tech Used
+
+The **Social Media API** leverages the following technologies and tools:
+
+### Backend
+
+- **Node.js**: JavaScript runtime for server-side development.
+- **Express.js**: Framework for building APIs and handling routing.
+- **MongoDB**: NoSQL database for storing user, post, and other app data.
+- **Mongoose**: ODM library for MongoDB and Node.js.
+
+### Other Tools and Libraries
+
+- **multer**: For handling file uploads.
+- **bcryptjs**: For password hashing and security.
+- **jsonwebtoken (JWT)**: Secure token-based authentication.
+- **cloudinary**: For managing and storing uploaded media files.
+- **dotenv**: For managing environment variables.
+- **winston**: Logging utility for effective debugging.
+
+---
+
+## Folder Structure
+
+```
+social-media-api/
+├── src/
+│   ├── config/
+│   │   └── db.js
+│   ├── errors/
+│   │   └── customError.js
+│   ├── features/
+│   │   ├── comment/
+│   │   ├── friendship/
+│   │   ├── like/
+│   │   ├── otp/
+│   │   ├── user/
+│   │   │   └── user.controller.js
+│   │   │   └── user.model.js
+│   │   │   └── user.repository.js
+│   │   │   └── user.routes.js
+│   ├── middlewares/
+│   │   └── auth-user.middleware.js
+│   ├── utils/
+│   │   └── dbHelpers.js
+├── .gitignore
+├── .env.example
+├── app.js
+├── env.js
+├── package-lock.json
+├── package.json
+├── README.md
+└── server.js
+```
+
+---
+
+## Installation
+
+To get started with the **Social Media API**, follow these steps:
+
+### Prerequisites
+
+Make sure you have the following installed on your machine:
+
+- **Node.js**
+- **npm** (Node Package Manager)
+- **MongoDB** (Local or cloud instance)
+
+---
+
+### Clone the Repository
+
+```bash
+git clone https://github.com/guru-bandike/Social-Media-API.git
+cd Social-Media-API
+```
+
+---
+
+### Install Dependencies
+
+```bash
+npm install
+```
+
+---
+
+### Set Up Environment Variables
+
+- Create a `.env` file in the root of the project by copying the provided `.env.example` file:
+
+```bash
+cp .env.example .env
+```
+
+- Open the **.env** file and replace the placeholder values with your actual environment settings.
+
+---
+
+### Start the Application
+
+Start the server in development mode:
+
+```bash
+npm run dev
+```
+
+The application will run on `http://localhost:8000` by default.
+
+---
+
+<h3 align="center" style="font-weight: bolder; color: #059d06">Happy Coding!</h3>
