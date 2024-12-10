@@ -5,12 +5,14 @@ import { UserModel } from '../features/user/user.model.js';
 // Define JWT authentication middleware
 const authUser = async (req, res, next) => {
   // Extract token
-  const token = req.headers['authorization'];
+  let token = req.headers['authorization'];
   try {
     // If token not found, throw custom error to send failure response
     if (!token) {
       return next(new CustomError('Token not found!', 401));
     }
+
+    token = token.replace('Bearer ', ''); // Extract JWT from Bearer token
 
     const secretKey = process.env.JWT_SECRET;
     // Verify token using JWT
