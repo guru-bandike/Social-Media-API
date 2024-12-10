@@ -4,21 +4,8 @@
 
 <h1 align="center" style="font-weight: bolder; color: #059d06">Social Media API</h1>
 
-<div style="display: flex; justify-content: space-around; gap: 20px;">
-  <a href="https://god.gw.postman.com/run-collection/33891228-8c4bf29f-8670-4851-9c05-2356ca075713?action=collection/fork&source=rip_markdown&collection-url=entityId=33891228-8c4bf29f-8670-4851-9c05-2356ca075713&entityType=collection&workspaceId=7a63351a-2e1e-4435-84ba-c7e1ed8def04#?env%5Bsocial-media-api%5D=W3sia2V5IjoiYmFzZVVybCIsInZhbHVlIjoiaHR0cHM6Ly9zb2NpYWwtbWVkaWEtYXBpLXByb2R1Y3Rpb24tOTAzZC51cC5yYWlsd2F5LmFwcCIsImVuYWJsZWQiOnRydWUsInR5cGUiOiJkZWZhdWx0In1d" target="_blank" style="text-decoration: none;">
-    <button style="background-color: rgb(255, 108, 55); color: white; padding: 12px 12px; border: none; border-radius: 5px; font-size: 1rem; cursor: pointer; transition: background-color 0.3s; display: flex; align-items: center;">
-      <i class="fas fa-play" style="margin-right: 8px;"></i> 
-      Test API with Postman
-    </button>
-  </a>
-
-  <a href="" target="_blank" style="text-decoration: none;">
-    <button style="background-color: rgb(255, 108, 55); color: white; padding: 12px 12px; border: none; border-radius: 5px; font-size: 1rem; cursor: pointer; transition: background-color 0.3s; display: flex; align-items: center;"> 
-      <i class="fas fa-play" style="margin-right: 8px;"></i> 
-      How to Test API with Postman
-    </button>
-  </a>
-</div>
+[![Test API with Postman](https://img.shields.io/badge/Test%20API%20with%20Postman-orange)](https://god.gw.postman.com/run-collection/33891228-8c4bf29f-8670-4851-9c05-2356ca075713?action=collection/fork&source=rip_markdown&collection-url=entityId=33891228-8c4bf29f-8670-4851-9c05-2356ca075713&entityType=collection&workspaceId=7a63351a-2e1e-4435-84ba-c7e1ed8def04#?env%5Bsocial-media-api%5D=W3sia2V5IjoiYmFzZVVybCIsInZhbHVlIjoiaHR0cHM6Ly9zb2NpYWwtbWVkaWEtYXBpLXByb2R1Y3Rpb24tOTAzZC51cC5yYWlsd2F5LmFwcCIsImVuYWJsZWQiOnRydWUsInR5cGUiOiJkZWZhdWx0In1d)
+[![How to Test API with Postman](https://img.shields.io/badge/How%20to%20Test%20API%20with%20Postman-orange)]()
 
 ## Project Description
 
