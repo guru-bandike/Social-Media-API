@@ -4,7 +4,7 @@
 
 <h1 align="center" style="font-weight: bolder; color: #059d06">Social Media API</h1>
 
-[![Test API with Postman](https://img.shields.io/badge/Test%20API%20with%20Postman-orange)](https://god.gw.postman.com/run-collection/33891228-8c4bf29f-8670-4851-9c05-2356ca075713?action=collection/fork&source=rip_markdown&collection-url=entityId=33891228-8c4bf29f-8670-4851-9c05-2356ca075713&entityType=collection&workspaceId=7a63351a-2e1e-4435-84ba-c7e1ed8def04#?env%5Bsocial-media-api%5D=W3sia2V5IjoiYmFzZVVybCIsInZhbHVlIjoiaHR0cHM6Ly9zb2NpYWwtbWVkaWEtYXBpLXByb2R1Y3Rpb24tOTAzZC51cC5yYWlsd2F5LmFwcCIsImVuYWJsZWQiOnRydWUsInR5cGUiOiJkZWZhdWx0In1d)
+[![Test API with Postman](https://img.shields.io/badge/Test%20API%20with%20Postman-orange)](https://app.getpostman.com/run-collection/33891228-e2b7a7dc-db1a-4bdc-8b5b-f0f768b11765?action=collection%2Ffork&source=rip_markdown&collection-url=entityId%3D33891228-e2b7a7dc-db1a-4bdc-8b5b-f0f768b11765%26entityType%3Dcollection%26workspaceId%3D7a63351a-2e1e-4435-84ba-c7e1ed8def04#?env%5Bsocial-media-api%5D=W3sia2V5IjoiYmFzZVVybCIsInZhbHVlIjoiaHR0cHM6Ly9zb2NpYWwtbWVkaWEtYXBpLXByb2R1Y3Rpb24tOTAzZC51cC5yYWlsd2F5LmFwcCIsImVuYWJsZWQiOnRydWUsInR5cGUiOiJkZWZhdWx0Iiwic2Vzc2lvblZhbHVlIjoiaHR0cHM6Ly9zb2NpYWwtbWVkaWEtYXBpLXByb2R1Y3Rpb24tOTAzZC51cC5yYWlsd2F5LmFwcCIsImNvbXBsZXRlU2Vzc2lvblZhbHVlIjoiaHR0cHM6Ly9zb2NpYWwtbWVkaWEtYXBpLXByb2R1Y3Rpb24tOTAzZC51cC5yYWlsd2F5LmFwcCIsInNlc3Npb25JbmRleCI6MH1d)
 [![How to Test API with Postman](https://img.shields.io/badge/How%20to%20Test%20API%20with%20Postman-orange)]()
 
 ## Project Description
