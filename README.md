@@ -9,11 +9,11 @@
 
 ## Project Description
 
-**Social Media API** is a backend application designed to support social media platforms. It provides essential functionalities such as user authentication, post management, commenting, liking, friendships, OTP-based password resets and passoword hashing, ensuring a seamless and secure user experience.
+**Social Media API** is a backend application designed to support social media platforms. It provides essential functionalities such as user authentication, post management, commenting, liking, friendships, OTP-based password resets and password hashing, ensuring a seamless and secure user experience.
 
 ## Key Features
 
-- **User Authentication:** Secure signup, login, and logout functionalities, including multi-device logout support.
+- **User Authentication:** Secure signup, login, and logout functionalities, including multi-device logout and active sessions with device info support.
 - **Post Management:** Full CRUD capabilities for posts with ownership restrictions.
 - **Comment System:** Add, update, and delete comments with ownership and permissions management.
 - **Like Functionality:** Toggle likes on posts and comments with metadata support.
