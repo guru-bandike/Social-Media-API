@@ -4,6 +4,7 @@ import logError from '../utils/errorLogger.js';
 import multer from 'multer';
 
 const handleApplicationLevelErrors = (err, req, res, next) => {
+  console.log(err);
   // If the error is a CustomError, it indicates a known error.
   // Send a response with the specific status code, message, and additional data if available.
   if (err instanceof CustomError) {
@@ -43,7 +44,7 @@ const handleApplicationLevelErrors = (err, req, res, next) => {
     if (err.code == 'LIMIT_UNEXPECTED_FILE')
       return res.status(400).json({
         status: false,
-        message: 'Incorrect file field name!',
+        message: 'Incorrect form file field name or only one media is allow to upload per Post!',
         receivedField: err.field,
         expectedField: 'media',
       });
