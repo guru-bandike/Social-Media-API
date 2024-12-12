@@ -42,11 +42,20 @@ const handleApplicationLevelErrors = (err, req, res, next) => {
   if (err instanceof multer.MulterError) {
     if (err.code == 'LIMIT_UNEXPECTED_FILE')
       return res.status(400).json({
-        status: false,
+        success: false,
         message: 'Incorrect form file field name or only one media is allow to upload per Post!',
         receivedField: err.field,
         expectedField: 'media',
       });
+  }
+
+  // Identify JSON parse errors and send a meaningful response
+  if (err.type === 'entity.parse.failed') {
+    return res.status(400).json({
+      success: false,
+      message: 'Invalid JSON payload!',
+      error: err.message,
+    });
   }
 
   // Log the error for debugging purposes
