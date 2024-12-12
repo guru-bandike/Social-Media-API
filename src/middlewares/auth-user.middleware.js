@@ -13,6 +13,7 @@ const authUser = async (req, res, next) => {
     }
 
     token = token.replace('Bearer ', ''); // Extract JWT from Bearer token
+    req.headers['authorization'] = token; // Update header for further usage
 
     const secretKey = process.env.JWT_SECRET;
     // Verify token using JWT
@@ -26,7 +27,6 @@ const authUser = async (req, res, next) => {
       return next(
         new CustomError('Token Expaired!', 401, { expiredAt: expiredToken.expiredAt.toString() })
       );
-
     // Attach user id to incoming request body for further usage
     req.userId = payload.userId;
 
