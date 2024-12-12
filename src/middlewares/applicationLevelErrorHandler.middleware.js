@@ -4,7 +4,6 @@ import logError from '../utils/errorLogger.js';
 import multer from 'multer';
 
 const handleApplicationLevelErrors = (err, req, res, next) => {
-  console.log(err);
   // If the error is a CustomError, it indicates a known error.
   // Send a response with the specific status code, message, and additional data if available.
   if (err instanceof CustomError) {
